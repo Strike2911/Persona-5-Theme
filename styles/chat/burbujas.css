@@ -1,0 +1,393 @@
+/* =========================================================
+   Estructura de las burbujas de chat 
+   ========================================================= */
+
+/* ---------
+   Variables
+   --------- */
+:root {
+    /* Color de mensajes recibidos */
+    --WDS-systems-bubble-surface-incoming: black !important;
+    /* Color de mensajes enviados */
+    --WDS-systems-bubble-surface-outgoing: white !important;
+    /* Quitar las esquinas redondeadas originales */
+    --xdsiky0: 0px !important;
+}
+
+/* --------------
+   Ocultar Colas
+   --------------  */
+[data-testid="conversation-panel-messages"] .x1n2onr6 + .x1n2onr6 {
+    margin-top: 10px !important;
+}
+ 
+span[data-testid="tail-out"], span[data-testid="tail-in"]{
+    display: none;
+}
+
+/* ------------------
+   Burbujas Enviadas
+   ------------------  */
+.x1g5lz36 {
+    position: relative !important;
+    background: transparent !important;
+    overflow: visible !important;
+}
+
+/* BORDE NEGRO */
+.x1g5lz36::before {
+    content: "" !important;
+    position: absolute !important;
+    top: -5px !important;
+    bottom: -5px !important;
+    left: -30px !important;
+    right: -30px !important;
+    background: black !important;
+    clip-path: polygon(
+        0% 0%,
+        94% 0%,
+        100% 100%,
+        6% 100%
+    ) !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+/* FONDO INTERIOR BLANCO */
+.x1g5lz36::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: -25px !important;
+    right: -25px !important;
+    background: white !important;
+    clip-path: polygon(
+        0% 0%,
+        94% 0%,
+        100% 100%,
+        6% 100%
+    ) !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+/* CONTENIDO */
+.x1g5lz36 > * {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.x1g5lz36 * {
+    color: black !important;
+}
+
+
+/* -------------------
+   Burbujas Recibidas
+   ------------------- */
+.x1ew7x2d {
+    position: relative !important;
+    background: transparent !important;
+    overflow: visible !important;
+}
+
+/* BORDE BLANCO */
+.x1ew7x2d::before {
+    content: "" !important;
+    position: absolute !important;
+    top: -5px !important;
+    bottom: -5px !important;
+    left: -30px !important;
+    right: -30px !important;
+    background: white !important;
+    clip-path: polygon(
+        6% 0%,
+        100% 0%,
+        94% 100%,
+        0% 100%
+    ) !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+/* FONDO INTERIOR NEGRO */
+.x1ew7x2d::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: -25px !important;
+    right: -25px !important;
+    background: var(--WDS-systems-bubble-surface-incoming) !important;
+    clip-path: polygon(
+        6% 0%,
+        100% 0%,
+        94% 100%,
+        0% 100%
+    ) !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+/* CONTENIDO */ 
+.x1ew7x2d > * {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* =================
+   MENSAJES CITADOS
+   ================= */
+
+/* QUITAR LA BARRA DEL COMIENZO DEL MENSAJE CITADO */
+
+.x51ohtg{
+    width: 0;
+}
+
+/* 
+    Quitarle el fondo a los mensajes citados recibidos
+*/
+
+.x1bu39yj{
+    background: transparent;
+}
+
+/* Cita dentro de un mensaje RECIBIDO */
+.x1ew7x2d [data-testid="quoted-message"] {
+    position: relative !important;
+    background: transparent !important;
+    overflow: visible !important;
+
+}
+
+.x1ew7x2d [data-testid="quoted-message"]::before {
+    content: "" !important;
+    position: absolute !important;
+    top: -5px !important;
+    bottom: -5px !important;
+    left: -30px !important;
+    right: -30px !important;
+    background: black !important;
+    clip-path: polygon(
+        6% 0%,
+        100% 0%,
+        94% 100%,
+        0% 100%
+    ) !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+.x1ew7x2d [data-testid="quoted-message"]::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: -25px !important;
+    right: -25px !important;
+    background: white !important;
+    clip-path: polygon(
+        6% 0%,
+        100% 0%,
+        94% 100%,
+        0% 100%
+    ) !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+.x1ew7x2d [data-testid="quoted-message"] > * {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.x1ew7x2d [data-testid="quoted-message"] * {
+    color: black !important;
+}
+
+.x1ew7x2d [data-testid="quoted-message"] {
+    margin-bottom: 12px !important;
+}
+
+
+/*
+    Cita dentro de un mensaje ENVIADO 
+*/
+
+.x1g5lz36 [data-testid="quoted-message"] {
+    position: relative !important;
+    background: transparent !important;
+    overflow: visible !important;
+
+}
+
+.x1g5lz36 [data-testid="quoted-message"]::before {
+    content: "" !important;
+    position: absolute !important;
+    top: -5px !important;
+    bottom: -5px !important;
+    left: -30px !important;
+    right: -30px !important;
+    background: white !important;
+    clip-path: polygon(
+        0% 0%,
+        94% 0%,
+        100% 100%,
+        6% 100%
+    ) !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+.x1g5lz36 [data-testid="quoted-message"]::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: -25px !important;
+    right: -25px !important;
+    background: black !important;
+    clip-path: polygon(
+        0% 0%,
+        94% 0%,
+        100% 100%,
+        6% 100%
+    ) !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+.x1g5lz36 [data-testid="quoted-message"] > * {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+.x1g5lz36 [data-testid="quoted-message"] * {
+    color: white !important;
+}
+
+.x1g5lz36 [data-testid="quoted-message"] {
+    margin-bottom: 12px !important;
+}
+
+/* ------------------
+   Separar Secciones
+   ------------------ */
+
+/* ===== RECIBIDOS ===== */
+
+.x1ew7x2d:has([data-testid="quoted-message"])::before,
+.x1ew7x2d:has([data-testid="quoted-message"])::after {
+    content: none !important;
+}
+
+.x1ew7x2d:has([data-testid="quoted-message"]) {
+    background: transparent !important;
+}
+
+.x1ew7x2d div:has(> [data-testid="quoted-message"]) + div {
+    position: relative !important;
+    background: transparent !important;
+    overflow: visible !important;
+}
+
+.x1ew7x2d div:has(> [data-testid="quoted-message"]) + div::before {
+    content: "" !important;
+    position: absolute !important;
+    top: -5px !important;
+    bottom: -5px !important;
+    left: -30px !important;
+    right: -30px !important;
+    background: white !important;
+    clip-path: polygon(
+        6% 0%,
+        100% 0%,
+        94% 100%,
+        0% 100%
+    ) !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+.x1ew7x2d div:has(> [data-testid="quoted-message"]) + div::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: -25px !important;
+    right: -25px !important;
+    background: var(--WDS-systems-bubble-surface-incoming) !important;
+    clip-path: polygon(
+        6% 0%,
+        100% 0%,
+        94% 100%,
+        0% 100%
+    ) !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+.x1ew7x2d div:has(> [data-testid="quoted-message"]) + div > * {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* ===== ENVIADOS ===== */
+
+/* Anular el paralelogramo del wrapper SOLO si tiene cita adentro */
+.x1g5lz36:has([data-testid="quoted-message"])::before,
+.x1g5lz36:has([data-testid="quoted-message"])::after {
+    content: none !important;
+}
+
+.x1g5lz36:has([data-testid="quoted-message"]) {
+    background: transparent !important;
+}
+
+.x1g5lz36 div:has(> [data-testid="quoted-message"]) + div {
+    position: relative !important;
+    background: transparent !important;
+    overflow: visible !important;
+}
+
+.x1g5lz36 div:has(> [data-testid="quoted-message"]) + div::before {
+    content: "" !important;
+    position: absolute !important;
+    top: -5px !important;
+    bottom: -5px !important;
+    left: -30px !important;
+    right: -30px !important;
+    background: white !important;
+    clip-path: polygon(
+        0% 0%,
+        94% 0%,
+        100% 100%,
+        6% 100%
+    ) !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+}
+
+.x1g5lz36 div:has(> [data-testid="quoted-message"]) + div::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: -25px !important;
+    right: -25px !important;
+    background: var(--WDS-systems-bubble-surface-outgoing) !important;
+    clip-path: polygon(
+        0% 0%,
+        94% 0%,
+        100% 100%,
+        6% 100%
+    ) !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+.x1g5lz36 div:has(> [data-testid="quoted-message"]) + div > * {
+    position: relative !important;
+    z-index: 2 !important;
+}

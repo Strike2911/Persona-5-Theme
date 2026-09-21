@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="90" height="340" viewBox="0 0 90 340">
+ <path fill="#fff" d="m0 110 14-19 4-32 13 8 10 54 16 6 7-45 12-12 14 10v260H0Z"/>
+ <path fill="#070708" d="M0 160h12l3-46 13-12 9 8 6 78 16-13 12 8 8-50 11 7v200H0Z"/>
+ <g fill="#fff" transform="skewY(-12)"><path d="M5 183h5v10H5zm0 20h5v10H5zm0 20h5v10H5zm0 20h5v10H5zm0 20h5v10H5zM23 141h5v10h-5zm0 20h5v10h-5zm0 20h5v10h-5zm0 20h5v10h-5zm0 20h5v10h-5zm0 20h5v10h-5zm0 20h5v10h-5zM48 205h5v10h-5zm0 20h5v10h-5zm0 20h5v10h-5zm0 20h5v10h-5zM69 210h5v10h-5zm0 20h5v10h-5zm0 20h5v10h-5zm0 20h5v10h-5z"/></g>
+ <path fill="#090909" stroke="#fff" stroke-width="3" d="m6 302 20-23 57 8-8 45H0Z"/>
+ <text x="15" y="323" fill="#fff" font-family="Impact,Arial Black,sans-serif" font-style="italic" font-weight="900" font-size="36" transform="rotate(-6 45 310)">P5</text>
+</svg>

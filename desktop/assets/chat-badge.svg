@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 130">
+ <path fill="#fff" d="m17 22 19 2 13-17 23 3 17-10 10 15 27-3-1 22 20 13-12 23 7 17-22 8-7 23-24-3-19 13-15-14-29 1 5-25L1 68l15-18Z"/>
+ <path fill="#090909" d="m24 29 18 3 13-17 20 5 12-9 8 15 24-4-2 18 17 10-13 20 8 12-22 7-6 21-20-4-18 12-12-14-24 1 5-23-20-16 16-14Z"/>
+ <g transform="rotate(-13 75 65)">
+  <path fill="#f4eb00" d="M23 34h105v65H23z"/>
+  <!-- Outlined glyphs do not depend on fonts installed on a friend's PC. -->
+  <g fill="#090909" transform="translate(30 44)">
+   <path d="M0 0h20v8H8v26h12v8H0Z"/>
+   <path d="M24 0h8v16h7V0h8v42h-8V24h-7v18h-8Z"/>
+   <path fill-rule="evenodd" d="M52 0h21v42h-8V27h-5v15h-8Zm8 8v11h5V8Z"/>
+   <path d="M77 0h20v8h-6v34h-8V8h-6Z"/>
+  </g>
+ </g>
+</svg>

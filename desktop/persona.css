@@ -1,0 +1,113 @@
+/* Persona 5: scoped to WhatsApp's panels. No layout changes to virtual lists. */
+html[data-p5-desktop] {
+  color-scheme: dark;
+  --p5-red: #e3021d;
+  --WDS-accent: #e3021d !important;
+  --WDS-accent-RGB: 227, 2, 29 !important;
+  --WDS-content-on-accent: #fff !important;
+  --WDS-content-on-accent-RGB: 255, 255, 255 !important;
+  --WDS-accent-emphasized: #ffafbc !important;
+  --WDS-accent-deemphasized: #611222 !important;
+  --WDS-persistent-always-branded: #ff4960 !important;
+  --WDS-systems-chat-background-wallpaper: #100e10 !important;
+  --panel-background: #100e10 !important;
+  --panel-background-lighter: #201b20 !important;
+  --background-default: #100e10 !important;
+  --background-default-hover: #302029 !important;
+  --background-default-active: #611222 !important;
+  --conversation-panel-background: #100e10 !important;
+  --incoming-background: #201b20 !important;
+  --outgoing-background: #611222 !important;
+  --WDS-systems-bubble-surface-incoming: #201b20 !important;
+  --WDS-systems-bubble-surface-outgoing: #611222 !important;
+  --unread-marker-background: #e3021d !important;
+  --unread-marker-text: #fff !important;
+  --button-primary-background: #e3021d !important;
+  --button-primary-background-hover: #b50018 !important;
+  --button-primary: #fff !important;
+  --teal: #ff4960 !important;
+  --teal-lighter: #ff4960 !important;
+  --icon-ack: #ff7890 !important;
+  --primary: #fff !important;
+  --secondary: #d4c8cd !important;
+}
+html[data-p5-desktop] #side {
+  background: #d90020 var(--p5-icon-img2) center / cover !important;
+  border-inline-end: 3px solid #faf4ee;
+}
+/* Keep this reset weaker than the individual panel designs. */
+html[data-p5-desktop] :where(#pane-side, [data-testid="chat-list"], [data-testid="drawer-left"], [data-testid="chatlist-header"], [data-testid="chat-list-search-container"]) {
+  background: transparent !important;
+}
+html[data-p5-desktop] [data-testid="chatlist-header"] {
+  background: #100e10 !important;
+  border-bottom: 3px solid #faf4ee;
+}
+html[data-p5-desktop] [data-testid="chatlist-header"] h1 {
+  font-style: italic;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+html[data-p5-desktop] [data-testid="cell-frame-container"] {
+  background: #100e10 !important;
+  border-radius: 0 !important;
+  box-shadow: inset 4px 0 #f8eee8, inset 0 -2px #d90020;
+  transition: background-color 110ms ease-out, box-shadow 110ms ease-out;
+}
+html[data-p5-desktop] [data-testid="cell-frame-container"]:hover,
+html[data-p5-desktop] [aria-selected="true"] [data-testid="cell-frame-container"] {
+  background: #51101c !important;
+  box-shadow: inset 7px 0 #fff, inset 0 -2px #d90020;
+}
+html[data-p5-desktop] :is([data-testid="cell-frame-title"], [data-testid="cell-frame-title"] span) { color: #fff !important; }
+html[data-p5-desktop] :is([data-testid="cell-frame-secondary"], [data-testid="cell-frame-secondary"] span, [data-testid="cell-frame-primary-detail"], [data-testid="cell-frame-primary-detail"] span) { color: #d4c8cd !important; }
+html[data-p5-desktop] [data-testid="filter-button"] button {
+  border-radius: 2px !important;
+  background: #100e10 !important;
+  color: #fff !important;
+  border: 1px solid #f8eee8 !important;
+}
+html[data-p5-desktop] [data-testid="filter-button"] button[aria-pressed="true"],
+html[data-p5-desktop] [data-testid="filter-button"] button[aria-selected="true"] { background: #8e0017 !important; }
+html[data-p5-desktop] [data-testid="conversation-header"] {
+  background: #d90020 var(--p5-icon-img) center / cover !important;
+  border-bottom: 3px solid #faf4ee;
+}
+html[data-p5-desktop] [data-testid="conversation-header"] :is(span, button, svg) { color: #fff !important; }
+html[data-p5-desktop] [data-testid="conversation-info-header-chat-title"] { font-weight: 800; }
+html[data-p5-desktop] [data-testid="conversation-background-default_chat_wallpaper"] {
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  background-image: repeating-linear-gradient(125deg, transparent 0 140px, #e3021d0c 140px 144px) !important;
+  opacity: 1 !important;
+}
+html[data-p5-desktop] [data-testid="conversation-panel-messages"] { background: transparent !important; }
+html[data-p5-desktop] [data-testid="msg-container"] :is(.x1g5lz36,.x1ew7x2d) {
+  border-radius: 2px !important;
+  box-shadow: -3px 3px 0 #faf4ee !important;
+}
+html[data-p5-desktop] [data-testid="compose-box"] {
+  background: #100e10 !important;
+  border-top: 3px solid #e3021d;
+  border-radius: 0 !important;
+}
+html[data-p5-desktop] [data-testid="conversation-compose-box-input"] {
+  caret-color: #ff4960;
+  color: #fff !important;
+}
+html[data-p5-desktop] :is([data-testid="navbar-primary-section"], [data-testid="navbar-footer-section"]) [data-navbar-item="true"] {
+  border-radius: 2px !important;
+  color: #fff !important;
+  transition: transform 110ms ease-out;
+}
+html[data-p5-desktop] [data-testid="navbar-primary-section"] [data-navbar-item="true"]:hover { transform: translateY(-2px); }
+html[data-p5-desktop] [data-testid="intro-panel"] {
+  background: #100e10 var(--p5-icon-imgBGW) center / cover !important;
+}
+html[data-p5-desktop] :is(#side, #main) :focus-visible { outline: 2px solid #ff758a !important; outline-offset: 2px; }
+/* Restrict reduced motion to themed surfaces; never interrupt media or calls. */
+html[data-p5-desktop][data-p5-lite] :is([data-testid="cell-frame-container"], [data-navbar-item="true"]) { transition: none !important; transform: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  html[data-p5-desktop] :is([data-testid="cell-frame-container"], [data-navbar-item="true"]) { transition: none !important; transform: none !important; }
+}

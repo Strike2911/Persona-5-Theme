@@ -1,0 +1,183 @@
+/* =========================================================
+   Lista de chats
+   ========================================================= */
+
+/* 
+  Fondo completo 
+*/
+
+div[data-testid="chat-list-search-container"],
+div:has(div[data-testid="chat-list-search-container"]),
+header[data-testid="chatlist-header"] header,
+div[data-testid="chat-list"],
+div[aria-label="chat-list-filters"],
+div[data-testid^="list-item-"],
+#pane-side
+{
+  background: transparent !important;
+}
+
+div:has(header[data-testid="chatlist-header"]){
+  background-image: var(--p5-icon-img2) !important;
+}
+
+
+/* ------------------
+   Boton nuevo chat
+   ------------------  */
+
+.xfn3atn{
+  background-color: white !important;
+  border-radius: 0 !important;
+  bottom: -5px !important;
+  left: -15px !important;
+  right: -15px !important;
+  clip-path: polygon(
+      0% 0%,
+      80% 0%,
+      100% 100%,
+      20% 100%
+  )
+}
+
+/* ------------------
+   Lista de Filtros
+   ------------------  */
+div[aria-label="chat-list-filters"] div[data-testid="filter-button"]{
+  bottom: -5px !important;
+  top: -5px !important;
+  left: -5px !important;
+  right: -5px !important;
+  clip-path: polygon(
+      4% 0%,
+      100% 0%,
+      96% 100%,
+      0% 100%
+  )
+}
+
+div[aria-label="chat-list-filters"] div[data-testid="filter-button"] span,
+div[aria-label="chat-list-filters"] div[data-testid="filter-button"] button {
+  background-color: white;
+  border-radius: 0;
+  color: #0d0c0b !important;
+  
+}
+
+div[aria-label="chat-list-filters"] div[data-testid="filter-button"] button[aria-selected="true"]{
+  pointer-events: none;
+  color: white !important;
+  background-color: #0d0c0b !important;
+  border-color: white  !important;
+  border-width: 4px;
+}
+
+div[aria-label="chat-list-filters"] div[data-testid="filter-button"] button[aria-selected="true"] span:not(:has(*)) {
+  background-color: #0d0c0b !important;
+  color: white !important;
+}
+
+
+/* ------------------
+   Lista de chats
+   ------------------  */
+
+div[data-testid="cell-frame-container"]{
+  margin-top: 10px;
+  background-color: #0d0c0b;
+  border-radius: 0;
+  bottom: -10px !important;
+  top: -10px !important;
+  bottom: 10px !important;
+
+  clip-path: polygon(
+      4% 0%,
+      100% 0%,
+      96% 100%,
+      0% 100%
+  );
+}
+
+div[data-testid^="list-item-"]{
+  background-color: white !important;
+
+
+  clip-path: polygon(
+      2% 0%,
+      100% 0%,
+      98% 100%,
+      0% 100%
+  );
+}
+
+
+/* Fotos de perfil */
+div[data-testid="cell-frame-container"] img {
+  border-radius: 0 !important;
+}
+
+/* ------------------
+   Chat seleccioando
+   ------------------  */
+
+div[data-testid^="list-item-"] div[role="gridcell"] div[aria-selected="true"] div[data-testid="cell-frame-container"] {
+  background-color: white !important;
+}
+
+
+div[data-testid^="list-item-"] div[role="gridcell"] div[aria-selected="true"] div[data-testid="cell-frame-title"] span,
+div[data-testid^="list-item-"] div[role="gridcell"] div[aria-selected="true"] div[data-testid="cell-frame-primary-detail"] span,
+div[data-testid^="list-item-"] div[role="gridcell"] div[aria-selected="true"] div[data-testid="cell-frame-secondary"] span {
+  color: black !important;
+}
+
+
+/* -------------------------
+   Chat seleccionado hover
+   -------------------------  */
+div[data-testid^="list-item-"] div[role="gridcell"]:hover div[data-testid="cell-frame-container"] {
+  background-color: white !important;
+}
+
+div[data-testid^="list-item-"] div[role="gridcell"]:hover div[data-testid="cell-frame-title"] span,
+div[data-testid^="list-item-"] div[role="gridcell"]:hover div[data-testid="cell-frame-primary-detail"] span,
+div[data-testid^="list-item-"] div[role="gridcell"]:hover div[data-testid="cell-frame-secondary"] span {
+  color: black !important;
+}
+
+div[data-testid="cell-frame-title"],
+div[data-testid="cell-frame-title"] span {
+  color: white !important;
+}
+
+div[data-testid="cell-frame-primary-detail"],
+div[data-testid="cell-frame-primary-detail"] span {
+  color: white !important;
+}
+
+div[data-testid="cell-frame-secondary"],
+div[data-testid="cell-frame-secondary"] span {
+  color: white !important;
+}
+
+
+/* -------------------
+   Contador no leidos
+   ------------------- */
+
+span[data-testid="icon-unread-count"] {
+  background-color: #e3021d !important;
+}
+
+span[data-testid="icon-unread-count"] span{
+  color: white !important;
+}
+
+/* ------------------
+   Estado menasjes
+   ------------------  */
+span[data-testid="last-msg-status"] svg,
+span[data-testid="last-msg-status"] svg path {
+  fill: red !important;
+  color: red !important;
+}

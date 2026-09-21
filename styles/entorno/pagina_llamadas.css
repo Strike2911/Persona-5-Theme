@@ -1,0 +1,80 @@
+/* ===========
+   Llamandas
+   =========== */
+
+div[data-testid="calls-drawer"] div:has(div[data-testid="chat-list"]) {
+    background-image: var(--p5-icon-img2);
+}
+
+/* ------------------
+   Filas
+   ------------------  */
+div[data-testid="calls-drawer"] div[data-testid^="list-item-"]:has(h2) {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+div[data-testid="calls-drawer"] div[data-testid^="list-item-"]:has(h2) > div {
+    background: transparent !important;
+}
+
+div[data-testid="calls-drawer"] div[data-testid^="list-item-"]:not(:has(h2)):has([role="gridcell"]) {
+    background-color: #ffffff !important;
+    clip-path: polygon(
+        8% 0,
+        100% 0,
+        92% 100%,
+        0 100%);
+    -webkit-clip-path: polygon(
+        8% 0,
+        100% 0,
+        92% 100%,
+        0 100%);
+    overflow: hidden;
+}
+
+div[data-testid="calls-drawer"] div[data-testid^="list-item-"]:not(:has(h2)):has([role="gridcell"]) [data-testid^="chatlist-message"] {
+    border-radius: 0 !important;
+    background-color: black !important;
+
+    color: white !important;
+    clip-path: polygon(
+        8% 0,
+        100% 0,
+        92% 100%,
+        0 100%
+    );
+    -webkit-clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+}
+
+
+div[data-testid="calls-drawer"] div[data-testid^="list-item-"]:not(:has(h2)):has([role="gridcell"]) [role="gridcell"] {
+    background-color: black !important;
+}
+
+
+/* ------------------
+   Pantalla de llamadas
+   ------------------  */ 
+/* fondo */
+div[data-testid="empty-state-drawer"] > div > div {
+    background: #0d0c0b !important;
+}
+ 
+/* contenedor botones */
+div[data-testid="empty-state-drawer"] > div > div > div {
+    background-image: var(--p5-icon-imgBGW);
+}
+ 
+/* botones dentro del contenedor*/
+div[data-testid="empty-state-drawer"] > div > div > div button {
+    border-radius: 0;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+}
+
+div[data-testid="empty-state-drawer"] > div > div > div button * {
+    color: #000000 !important;
+}

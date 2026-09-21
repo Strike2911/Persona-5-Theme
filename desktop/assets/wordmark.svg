@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="100" viewBox="0 0 340 100">
+ <defs><pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.8" fill="#080808"/></pattern></defs>
+ <path fill="#080808" d="m12 35 33-27 75 11 31-14 48 13 83-16 30 25-18 66-80-10-58 15-24-15-78 9Z"/>
+ <path fill="#fff" d="m0 7 26 12-15 10ZM320 61l20 24-33 8Z"/>
+ <g transform="rotate(-5 170 50)" font-family="Impact,Arial Black,sans-serif" font-size="65" font-weight="900" font-style="italic" stroke-linejoin="miter" paint-order="stroke fill">
+  <text x="29" y="70" textLength="276" lengthAdjust="spacingAndGlyphs" fill="#fff" stroke="#fff" stroke-width="16">WhatsApp</text>
+  <text x="29" y="70" textLength="276" lengthAdjust="spacingAndGlyphs" fill="#fff" stroke="#080808" stroke-width="9">WhatsApp</text>
+ </g>
+</svg>

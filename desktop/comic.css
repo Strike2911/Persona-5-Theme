@@ -1,0 +1,299 @@
+/* Illustrated comic layout. This layer does not redefine message animations. */
+html[data-p5-desktop] #app {
+  background-color:#080809 !important;
+  background-image:radial-gradient(#090909 1.5px,transparent 2px),linear-gradient(130deg,#d60722 0 14%,#fff 14% 16%,#090909 16% 80%,#e00020 80%);
+  background-size:7px 7px,100% 100%;
+}
+html[data-p5-desktop] [data-testid="drawer-left"] {
+  background:#080809 !important;
+  border-right:5px solid #e50927;
+}
+html[data-p5-desktop] #side {background:#090909 !important;border-inline-end:0;box-shadow:none}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"] {
+  isolation:isolate;position:relative;overflow:visible !important;
+}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"]::before {
+  content:"";position:absolute;inset:-12px -5px -8px -12px;z-index:-1;pointer-events:none;
+  background:radial-gradient(#090909 1px,transparent 1.6px) 0 0/5px 5px,#c50019;
+  clip-path:polygon(3% 3%,98% 0,92% 88%,8% 100%,0 55%);
+}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"] h2 {
+  font-size:0 !important;line-height:0 !important;transform:none;height:40px;
+}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"] h2 * {font-size:0 !important;line-height:0 !important}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"] h2::before {
+  content:"WhatsApp";display:inline-block;font:italic 900 clamp(28px,3vw,40px)/1 Impact,"Arial Black",sans-serif;
+  text-transform:none;letter-spacing:-1.8px;color:#fff;-webkit-text-stroke:5px #090909;paint-order:stroke fill;
+  transform:rotate(-5deg);filter:drop-shadow(2px 2px 0 #fff);
+}
+/* Full-width cards, with separate border and fill so text is never clipped. */
+html[data-p5-desktop] [data-testid="cell-frame-container"]::before {
+  inset:3px 7px 3px 8px;background:#595459;z-index:-2;
+  clip-path:polygon(1% 5%,100% 0,96% 90%,88% 100%,0 96%);
+}
+html[data-p5-desktop] [data-testid="cell-frame-container"]::after {
+  content:"";position:absolute;inset:6px 11px 6px 12px;background:#090909;
+  clip-path:polygon(1% 5%,100% 0,96% 90%,88% 100%,0 96%);
+  z-index:-1;pointer-events:none;
+}
+html[data-p5-desktop] [data-testid="cell-frame-container"]:hover::before,
+html[data-p5-desktop] [aria-selected="true"] [data-testid="cell-frame-container"]::before {background:#fff}
+html[data-p5-desktop] [data-testid="cell-frame-container"]:hover::after,
+html[data-p5-desktop] [aria-selected="true"] [data-testid="cell-frame-container"]::after {background:#dc061f}
+html[data-p5-desktop] [data-testid="cell-frame-container"]:hover [data-testid="cell-frame-secondary"] span,
+html[data-p5-desktop] [aria-selected="true"] [data-testid="cell-frame-container"] [data-testid="cell-frame-secondary"] span {color:#fff !important}
+html[data-p5-desktop] [data-testid="cell-frame-container"] div:has(>img) {
+  box-shadow:0 0 0 3px #fff,0 0 0 6px #090909,-5px 5px 0 7px #f0eb00 !important;
+}
+html[data-p5-desktop] [aria-selected="true"] [data-testid="cell-frame-container"] div:has(>img) {box-shadow:0 0 0 3px #fff,0 0 0 6px #090909 !important}
+html[data-p5-desktop] [data-testid="cell-frame-primary-detail"] {padding-inline-end:10px}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] {padding-top:8px;padding-bottom:8px}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] > div {
+  border:2px solid #fff;box-shadow:3px 3px #090909,-3px 5px #fff;
+}
+html[data-p5-desktop] [data-testid="filter-button"] button {border:2px solid #555 !important}
+html[data-p5-desktop] [data-testid="filter-button"] button:is([aria-selected="true"],[aria-pressed="true"]) {background:#e30623 !important;border-color:#e30623 !important;color:#fff !important}
+html[data-p5-desktop] [data-testid="filter-button"] button:is([aria-selected="true"],[aria-pressed="true"]) span {color:#fff !important}
+/* Local background image, shared by all chats, no network or moving wallpaper. */
+html[data-p5-desktop] [data-testid="conversation-panel-body"] {
+  position:relative;
+  background:#100b0e var(--p5-wallpaper) center right/cover no-repeat !important;
+}
+html[data-p5-desktop] [data-testid="conversation-background-default_chat_wallpaper"] {
+  background:linear-gradient(90deg,#00000012,#00000008) !important;
+}
+html[data-p5-desktop] [data-testid="conversation-panel-wrapper"] {background:#080809 !important}
+html[data-p5-desktop] [data-testid="conversation-header"] {
+  min-height:76px;box-sizing:border-box;
+  background:transparent !important;box-shadow:none;border:0 !important;
+}
+html[data-p5-desktop] [data-testid="conversation-header"]::before,
+html[data-p5-desktop] [data-testid="conversation-header"]::after {
+  content:"";position:absolute;pointer-events:none;display:block !important;width:auto !important;height:auto !important;
+  clip-path:polygon(0 1%,12% 0,52% 8%,100% 2%,99% 100%,1% 94%);
+}
+html[data-p5-desktop] [data-testid="conversation-header"]::before {inset:1px 2px 0 0;background:#e30623;z-index:-2}
+html[data-p5-desktop] [data-testid="conversation-header"]::after {inset:6px 8px 6px 6px;background:#090909;z-index:-1}
+html[data-p5-desktop] [data-testid="conversation-info-header-chat-title"] {font-size:25px !important;line-height:28px !important}
+html[data-p5-desktop] [data-testid="conversation-header"] img {transform:rotate(-5deg) scale(.9);box-shadow:0 0 0 3px #fff;filter:grayscale(1) contrast(1.15)}
+/* A small corner label stays outside the message content. */
+html[data-p5-desktop] [data-testid="conversation-panel-body"]::after {
+  content:"TAKE YOUR TIME";position:absolute;top:14px;right:20px;z-index:0;
+  font:italic 900 19px/1 Impact,"Arial Black",sans-serif;letter-spacing:-.5px;
+  padding:6px 10px;background:#fff;color:#090909;transform:rotate(3deg);
+  clip-path:polygon(0 8%,30% 0,33% 9%,100% 0,95% 100%,4% 92%);
+  pointer-events:none;
+}
+html[data-p5-desktop] [data-testid="conversation-panel-messages"] {z-index:1}
+html[data-p5-desktop] [data-testid="msg-container"] [data-testid="sticker-container"] img {
+  border-radius:0 !important;box-shadow:0 0 0 3px #fff,0 0 0 7px #090909;transform:rotate(-1.5deg) scale(.96);
+}
+/* The composer is framed without replacing WhatsApp's input or send control. */
+html[data-p5-desktop] [data-testid="compose-box"] {
+  position:relative;isolation:isolate;background:transparent !important;
+  border:0;box-shadow:none;border-radius:0 !important;min-height:72px;
+}
+html[data-p5-desktop] [data-testid="compose-box"]::before,
+html[data-p5-desktop] [data-testid="compose-box"]::after {
+  content:"";position:absolute;pointer-events:none;
+  clip-path:polygon(0 6%,5% 0,98% 5%,100% 96%,3% 100%);
+}
+html[data-p5-desktop] [data-testid="compose-box"]::before {inset:0 2px;background:#df0623;z-index:-2}
+html[data-p5-desktop] [data-testid="compose-box"]::after {inset:7px 9px;background:#090909;z-index:-1}
+html[data-p5-desktop] [data-testid="compose-box"] >div {border-radius:0 !important;background:transparent !important}
+html[data-p5-desktop] [data-testid="compose-box"] .xk7ee7b {border-radius:0 !important;background:transparent !important}
+html[data-p5-desktop] [data-testid="conversation-compose-box-input"] {outline:1px solid #bdb7bc !important;outline-offset:5px}
+html[data-p5-desktop] [data-testid="conversation-compose-box-input"]:focus-visible {outline-color:#fff !important}
+html[data-p5-desktop] #main [data-testid="conversation-compose-box-input"]:focus-visible {outline:1px solid #fff !important;outline-offset:5px}
+html[data-p5-desktop] [data-testid="intro-panel"] {
+  background:linear-gradient(90deg,#00000035,#00000022),var(--p5-wallpaper) center right/cover no-repeat !important;
+  border:6px solid #de0523;box-shadow:inset 0 0 0 3px #090909;
+}
+html[data-p5-desktop] [data-testid="intro-panel"]::after {color:#ffed00;font-size:100px;bottom:5%;right:5%;text-shadow:5px 5px #000}
+html[data-p5-desktop] [data-testid="navbar-primary-section"] [data-navbar-item-selected="true"] {
+  background:#e30623 !important;clip-path:polygon(0 0,100% 5%,95% 80%,7% 100%);
+}
+@media(max-width:900px) {
+  html[data-p5-desktop] [data-testid="conversation-panel-body"]::after {font-size:14px;right:12px}
+  html[data-p5-desktop] [data-testid="conversation-info-header-chat-title"] {font-size:20px !important;line-height:24px !important}
+  html[data-p5-desktop] [data-testid="conversation-header"] {min-height:70px}
+}
+
+/* Layout correction: reserve space instead of painting over adjacent controls. */
+html[data-p5-desktop] #side >div:has(>[data-testid="chat-list-search-container"]) {
+  height:auto !important;min-height:62px;flex:0 0 auto;
+}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] {
+  height:62px !important;min-height:62px;box-sizing:border-box;padding:10px 14px 12px !important;
+}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] >div {
+  height:40px;box-sizing:border-box;position:relative;isolation:isolate;
+  border:0 !important;box-shadow:none !important;background:transparent !important;
+}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] >div::before,
+html[data-p5-desktop] [data-testid="chat-list-search-container"] >div::after {
+  content:"";position:absolute;pointer-events:none;z-index:-2;
+  clip-path:polygon(3% 0,96% 3%,100% 45%,96% 97%,0 100%);
+}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] >div::before {inset:-3px;background:#fff}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] >div::after {inset:1px;background:#090909;z-index:-1}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] >div >div {background:transparent !important;border-radius:0 !important}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"] {height:58px;min-width:0}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"]::before {content:none}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"] h2 {height:58px !important;margin:0 !important}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"] h2::before {
+  content:"";width:100%;max-width:260px;height:58px;display:block;
+  background:var(--p5-wordmark) center/contain no-repeat;transform:none;filter:none;
+}
+/* Space above and below capitals and accents; ellipsis only for genuinely long names. */
+html[data-p5-desktop] [data-testid="conversation-info-header-chat-title"] {
+  font-size:22px !important;line-height:32px !important;padding:2px 3px !important;
+  white-space:nowrap !important;text-overflow:ellipsis;box-sizing:content-box;
+}
+html[data-p5-desktop] [data-testid="conversation-header"] div:has(>[data-testid="conversation-info-header-chat-title"]),
+html[data-p5-desktop] [data-testid="conversation-header"] div:has(>div>[data-testid="conversation-info-header-chat-title"]) {overflow:visible !important;min-height:36px}
+html[data-p5-desktop] :is([data-testid="cell-frame-title"],[data-testid="cell-frame-title"] span) {
+  font-size:17px !important;line-height:25px !important;-webkit-text-stroke:2px #090909;
+  white-space:nowrap !important;
+}
+/* Navigation remains functional over a static skyline, with a white torn edge. */
+html[data-p5-desktop] header[data-testid="chatlist-header"]:has([data-testid="navbar-primary-section"]) {
+  background:#070708 var(--p5-sidebar-city) center calc(100% - 92px)/100% 260px no-repeat !important;
+  border-bottom:0 !important;isolation:isolate;
+}
+html[data-p5-desktop] header[data-testid="chatlist-header"]:has([data-testid="navbar-primary-section"])::after {
+  content:"";display:block;position:absolute;right:0;top:0;bottom:0;width:4px;height:auto;
+  background:#fff;clip-path:polygon(45% 0,100% 0,70% 24%,100% 45%,45% 72%,100% 100%,0 100%,20% 61%,0 20%);
+  pointer-events:none;
+}
+html[data-p5-desktop] [data-testid="navbar-primary-section"] [data-navbar-item="true"] {background:transparent !important;border-radius:0 !important}
+html[data-p5-desktop] [data-testid="navbar-primary-section"] [data-navbar-item-selected="true"] {
+  background:#ed001f !important;box-shadow:inset 2px 2px #fff;transform:rotate(-4deg);
+}
+/* Composer: reserve a dedicated badge column and a decorative lower strip. */
+html[data-p5-desktop] #main footer:has([data-testid="compose-box"]) {
+  padding-bottom:18px !important;
+  background:#090909 var(--p5-comic-edge) bottom center/100% 22px no-repeat !important;
+}
+html[data-p5-desktop] [data-testid="compose-box"] {padding-right:78px !important;box-sizing:border-box;min-height:74px}
+html[data-p5-desktop] [data-testid="compose-box"]::before {right:73px}
+html[data-p5-desktop] [data-testid="compose-box"]::after {right:79px}
+html[data-p5-desktop] #main footer:has([data-testid="compose-box"])::after {
+  content:"CHAT";position:absolute;right:6px;top:8px;width:65px;height:58px;
+  display:grid;place-items:center;box-sizing:border-box;
+  background:#090909;color:#f3ef00;font:900 29px/1 Impact,"Arial Black",sans-serif;
+  text-shadow:2px 2px #000;transform:rotate(-12deg);border:4px solid #fff;
+  clip-path:polygon(8% 0,38% 8%,62% 0,76% 10%,100% 8%,94% 44%,100% 70%,82% 83%,83% 100%,51% 91%,23% 100%,13% 79%,0 60%,10% 36%);
+  pointer-events:none;z-index:3;
+}
+html[data-p5-desktop] [data-testid="compose-box"] .xk7ee7b {padding-top:10px !important;padding-bottom:10px !important}
+html[data-p5-desktop] #main [data-testid="conversation-compose-box-input"],
+html[data-p5-desktop] #main [data-testid="conversation-compose-box-input"]:focus-visible {outline:1px solid #ddd !important;outline-offset:4px}
+html[data-p5-desktop] [data-testid="compose-box"] button:has([data-icon="wds-ic-send-filled"]) {
+  background:#090909 !important;color:#fff !important;box-shadow:0 0 0 2px #fff;
+  clip-path:polygon(0 0,100% 50%,0 100%,14% 50%);transform:none;
+}
+@media(max-width:900px) {
+  html[data-p5-desktop] [data-testid="conversation-info-header-chat-title"] {font-size:19px !important;line-height:29px !important}
+  html[data-p5-desktop] [data-testid="compose-box"] {padding-right:60px !important}
+  html[data-p5-desktop] [data-testid="compose-box"]::before {right:56px}
+  html[data-p5-desktop] [data-testid="compose-box"]::after {right:62px}
+  html[data-p5-desktop] #main footer:has([data-testid="compose-box"])::after {width:50px;font-size:23px;height:51px;top:12px}
+}
+/* Unified header, search and filter surfaces. Keep all original hit targets. */
+html[data-p5-desktop] header[data-testid="chatlist-header"]:has([data-testid="drawer-title-body"]) {
+  background:radial-gradient(#080809 1.2px,transparent 1.6px) 0 0/6px 6px,linear-gradient(115deg,#dc001e 0 61%,#080809 61% 81%,#fff 81% 85%,#080809 85%) !important;
+  border-bottom:0 !important;box-shadow:inset 0 -5px #090909;
+}
+html[data-p5-desktop] [data-testid="chatlist-header"] [data-testid="drawer-title-body"] h2::before {
+  max-width:285px;height:62px;background-position:left center;
+}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] {background:#090909 !important}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] div {
+  border-radius:0 !important;box-shadow:none !important;outline:none !important;
+}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] div:has(input) {
+  background:transparent !important;border-color:transparent !important;
+}
+html[data-p5-desktop] #side [data-testid="chat-list-search-container"] input {
+  outline:none !important;box-shadow:none !important;border:0 !important;background:transparent !important;color:#fff !important;
+}
+html[data-p5-desktop] [data-testid="chat-list-search-container"] >div:focus-within::before {background:#ed0024}
+html[data-p5-desktop] [data-testid="filter-button"] button {
+  position:relative;isolation:isolate;clip-path:none !important;
+  border:0 !important;background:transparent !important;padding:8px 16px !important;
+  font:italic 800 14px/20px "Segoe UI",sans-serif !important;color:#fff !important;
+}
+html[data-p5-desktop] [data-testid="filter-button"] button::before,
+html[data-p5-desktop] [data-testid="filter-button"] button::after {
+  content:"";position:absolute;pointer-events:none;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+html[data-p5-desktop] [data-testid="filter-button"] button::before {inset:0;background:#797979;z-index:-2}
+html[data-p5-desktop] [data-testid="filter-button"] button::after {inset:2px;background:#090909;z-index:-1}
+html[data-p5-desktop] [data-testid="filter-button"] button:is([aria-selected="true"],[aria-pressed="true"]) {background:transparent !important}
+html[data-p5-desktop] [data-testid="filter-button"] button:is([aria-selected="true"],[aria-pressed="true"])::before {background:#fff}
+html[data-p5-desktop] [data-testid="filter-button"] button:is([aria-selected="true"],[aria-pressed="true"])::after {background:#e30623}
+html[data-p5-desktop] [data-testid="filter-button"] button:hover::before {background:#fff}
+html[data-p5-desktop] [data-testid="filter-button"] button span {color:inherit !important}
+/* The native recent-contact grid keeps its layout and accessible names. */
+html[data-p5-desktop] #side div:has(>div>[data-testid="recent-search-item"]) {
+  background:#090909 !important;border-bottom:2px solid #e30623;padding-bottom:14px;
+}
+html[data-p5-desktop] #side [data-testid="recent-search-item"] {
+  padding:8px 5px !important;background:#121214 !important;border-radius:0 !important;
+  border-bottom:2px solid #555;gap:9px;color:#fff !important;
+}
+html[data-p5-desktop] #side [data-testid="recent-search-item"]:hover {background:#3b0c16 !important;border-bottom-color:#e30623}
+html[data-p5-desktop] #side [data-testid="recent-search-item"] >div:first-child {
+  border-radius:0 !important;transform:rotate(-4deg) scale(.88);overflow:visible !important;
+  box-shadow:0 0 0 2px #fff,-3px 3px 0 3px #f0e600;
+}
+html[data-p5-desktop] #side [data-testid="recent-search-item"] >div:first-child div,
+html[data-p5-desktop] #side [data-testid="recent-search-item"] img {border-radius:0 !important}
+html[data-p5-desktop] #side [data-testid="recent-search-item"] img {filter:grayscale(1) contrast(1.12)}
+html[data-p5-desktop] #side [data-testid="recent-search-item"] >span {
+  font:700 12px/17px "Segoe UI",sans-serif !important;color:#fff !important;
+  min-height:34px;white-space:normal;overflow-wrap:anywhere;
+}
+html[data-p5-desktop] #side div:has(>div>[data-testid="recent-search-item"]) >div:not(:has([data-testid="recent-search-item"])) button {
+  background:#090909 !important;color:#fff !important;border:1px solid #888 !important;border-radius:0 !important;
+}
+/* Tall photo/video bubbles: frame follows the complete caption and timestamp. */
+html[data-p5-desktop] [data-testid="msg-container"] :is(.x1g5lz36,.x1ew7x2d):has([data-testid="image-thumb"],[data-testid="video-thumb"])::before {
+  inset:-3px -5px;clip-path:polygon(0 2px,100% 0,calc(100% - 2px) 100%,2px calc(100% - 1px));
+}
+html[data-p5-desktop] [data-testid="msg-container"] :is(.x1g5lz36,.x1ew7x2d):has([data-testid="image-thumb"],[data-testid="video-thumb"])::after {
+  inset:0 -2px;clip-path:none;
+}
+html[data-p5-desktop] [data-testid="conversation-panel-body"] {background-position:center !important}
+html[data-p5-desktop] [data-testid="filter-button"] button::before,
+html[data-p5-desktop] [data-testid="filter-button"] button::after {opacity:1 !important;display:block !important;border-radius:0 !important}
+html[data-p5-desktop] header[data-testid="chatlist-header"]:has([data-testid="drawer-title-body"]) {background-size:6px 6px,100% 100% !important;background-color:#090909 !important}
+html[data-p5-desktop] header[data-testid="chatlist-header"]:has([data-testid="drawer-title-body"]) >header {background:transparent !important}
+html[data-p5-desktop] #side div:has(>div>[data-testid="recent-search-item"]) >div:not(:has([data-testid="recent-search-item"])) button * {color:#fff !important}
+/* Transparent stickers have invisible canvas margins: never frame their canvas. */
+html[data-p5-desktop] [data-testid="msg-container"] [data-testid="sticker-container"] img {
+  border:0 !important;box-shadow:none !important;transform:none !important;filter:none !important;
+}
+/* Preserve each contact's original palette rather than applying monochrome. */
+html[data-p5-desktop] [data-testid="cell-frame-container"] img,
+html[data-p5-desktop] [data-testid="conversation-header"] img,
+html[data-p5-desktop] #side [data-testid="recent-search-item"] img {filter:none !important}
+html[data-p5-desktop] #main:not(:has([data-testid="group-chat-profile-picture"])) [data-testid="msg-container"]:has(>.x1ew7x2d)::before {filter:none !important}
+/* The badge has its own complete jagged outline, separate from the controls. */
+html[data-p5-desktop] #main footer:has([data-testid="compose-box"])::after {
+  content:"";width:88px;height:78px;right:0;top:0;
+  background:var(--p5-chat-badge) center/contain no-repeat;
+  border:0;clip-path:none;transform:none;text-shadow:none;
+}
+html[data-p5-desktop] [data-testid="compose-box"] {padding-right:92px !important}
+html[data-p5-desktop] [data-testid="compose-box"]::before {right:86px}
+html[data-p5-desktop] [data-testid="compose-box"]::after {right:92px}
+@media(max-width:900px) {
+ html[data-p5-desktop] #main footer:has([data-testid="compose-box"])::after {width:70px;height:70px;top:4px}
+ html[data-p5-desktop] [data-testid="compose-box"] {padding-right:74px !important}
+ html[data-p5-desktop] [data-testid="compose-box"]::before {right:69px}
+ html[data-p5-desktop] [data-testid="compose-box"]::after {right:75px}
+}
+/* Never render a saved portrait when the active header has no contact photo. */
+html[data-p5-desktop] #main:not(:has([data-testid="conversation-header"] img[src])) [data-testid="msg-container"]:has(>.x1ew7x2d)::before {content:none !important}

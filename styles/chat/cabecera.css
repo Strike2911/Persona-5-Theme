@@ -1,0 +1,114 @@
+/* =========
+   Cabecera
+   ========= */
+
+[data-testid="conversation-header"] {
+    position: relative !important;
+    overflow: visible !important;
+    background: transparent !important;
+
+    /* 
+    Tamaño de los picos que sobresalen
+    */
+    --bulge-room: 25px;
+
+    /* 
+    Altura default del header
+    */
+    --header-h: 64px;
+}
+
+
+/*
+Empujamos el contenido normal del header por encima del ::before 
+*/
+
+[data-testid="conversation-header"] > * {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+[data-testid="conversation-header"]::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+
+    /* Alto total = alto del header + colchón para los picos */
+    height: calc(var(--header-h) + var(--bulge-room)) !important;
+
+    background-image: var(--p5-icon-img);
+    background-size: cover;
+    z-index: 1 !important;
+    pointer-events: none !important;
+
+    --p1: 0px;   /* extremo izquierdo*/
+    --p2: 12px;  /* (x ≈ 16.6%) */
+    --p3: 0px;  /* (x ≈ 33.3%) */
+    --p4: 20px;  /* centro*/
+    --p5: 0px;  /* (x ≈ 66.6%) */
+    --p6: 12px;  /* (x ≈ 83.3%) */
+    --p7: 0px;   /* extremo derecho*/
+
+    clip-path: polygon(
+        0% 0%,
+        100% 0%,
+        100% calc(var(--header-h) + var(--p7)),
+        83.3% calc(var(--header-h) + var(--p6)),
+        66.6% calc(var(--header-h) + var(--p5)),
+        50% calc(var(--header-h) + var(--p4)),
+        33.3% calc(var(--header-h) + var(--p3)),
+        16.6% calc(var(--header-h) + var(--p2)),
+        0% calc(var(--header-h) + var(--p1))
+    ) !important;
+}
+
+
+
+
+/* ================
+   FOTO DE PERFIL
+   ================ */
+ 
+/* Foto cuadrada (quitamos el radio circular en las 4 esquinas) */
+[data-testid="conversation-header"] img.x1c9tyrk.xeusxvb.x1pahc9y.x1ertn4p {
+    border-start-start-radius: 0 !important;
+    border-start-end-radius: 0 !important;
+    border-end-start-radius: 0 !important;
+    border-end-end-radius: 0 !important;
+    position: relative !important;
+    z-index: 2 !important;
+}
+ 
+[data-testid="conversation-header"] div:has(> img) {
+    margin-left: 10px;
+    position: relative !important;
+    overflow: visible !important;
+    border: 10px solid black;
+}
+ 
+/* 
+    CUADRO BLANCO 
+*/
+[data-testid="conversation-header"] div:has(> img)::before {
+    content: "" !important;
+    position: absolute !important;
+ 
+    --frame-grow: 8px;
+    top: -4px!important;
+    left: -10px !important;
+    right: -10px !important;
+    bottom: -6px !important;
+ 
+    background-color: white !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+ 
+    clip-path: polygon(
+        15% 0%,
+        100% 0%,
+        90% 100%,
+        0% 100%
+    ) !important;
+}

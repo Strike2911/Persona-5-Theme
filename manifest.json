@@ -1,0 +1,50 @@
+{
+  "manifest_version": 3,
+  "name": "Tema Persona 5 Royal WhatsApp",
+  "version": "1.0.0",
+  "description": "Personaliza el hambiente de WhatsApp Web con el estilo de los Persona 5 royal.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://web.whatsapp.com/*"
+      ],
+      "js": [
+        "./scripts/chat/fondo.js",
+        "./scripts/entorno/imagenes.js"
+      ],
+      "css": [
+        "./styles/chat/burbujas.css",
+        "./styles/chat/input.css",
+        "./styles/chat/fondo.css",
+        "./styles/chat/cabecera.css",
+        "./styles/lista_chats/lista_chats.css",
+        "./styles/entorno/barra_lateral.css",
+        "./styles/entorno/pagina_principal.css",
+        "./styles/entorno/pagina_llamadas.css",
+        "./styles/entorno/pagina_estados.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/*"
+      ],
+      "matches": [
+        "https://web.whatsapp.com/*"
+      ]
+    }
+  ],
+  "permissions": [],
+  "host_permissions": [
+    "https://web.whatsapp.com/*"
+  ]
+}

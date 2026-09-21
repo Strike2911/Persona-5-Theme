@@ -1,0 +1,61 @@
+/* =========================
+   BARRA LATERAL IZQUIERDA
+   ========================= */
+
+/* 
+    Fondo 
+*/
+header:has(div[data-testid="navbar-primary-section"]){
+    background-color: #0d0c0b ;
+}
+
+/* --------------------
+   Botones principales
+   --------------------  */
+[data-testid="navbar-primary-section"] [data-navbar-item="true"]{
+    border-radius: 0;    
+    background-color: white !important;
+
+    clip-path: polygon(
+        10% 0%,
+        100% 0%,
+        90% 100%,
+        0% 100%
+    ) !important;
+}
+
+[data-testid="navbar-primary-section"] [data-navbar-item-selected] svg,
+[data-testid="navbar-primary-section"] [data-navbar-item-selected] svg path {
+    fill: black !important;       
+}
+
+/* -----------------------------
+   Indicador mensajes sin leer
+   -----------------------------  */
+span[role="status"] {
+    background-color: red;
+}
+
+[data-testid="navbar-primary-section"] [data-navbar-item-selected] ~ * span,
+[data-testid="navbar-primary-section"] [data-navbar-item-selected] ~ * {
+  color: white !important;
+}
+
+/* ---------
+   Footer
+   --------- */
+[data-testid="navbar-footer-section"] > div > div {
+  background-color: #ffffff !important;
+  clip-path: polygon(
+        10% 0%,
+        100% 0%,
+        90% 100%,
+        0% 100%
+    ) !important;
+}
+
+[data-testid="navbar-footer-section"] > div > div svg,
+[data-testid="navbar-footer-section"] > div > div svg path {
+  fill: #000000 !important;
+  color: #000000 !important;
+}

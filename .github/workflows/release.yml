@@ -1,0 +1,45 @@
+name: Publicar instalador
+on:
+  push:
+    branches: [main]
+    paths: ['desktop/version.json']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: publish-installer
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.17.0'
+          architecture: x64
+      - name: Preparar version
+        id: version
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (Get-Content desktop/version.json -Raw | ConvertFrom-Json).version
+          if ($version -notmatch '^\d{1,5}\.\d{1,5}\.\d{1,5}$') { throw 'Version invalida' }
+          "tag=v$version" >> $env:GITHUB_OUTPUT
+          gh release view "v$version" --repo $env:GITHUB_REPOSITORY *> $null
+          if ($LASTEXITCODE -eq 0) { throw "La version v$version ya existe. Incrementa desktop/version.json." }
+          $global:LASTEXITCODE=0
+      - name: Compilar y probar
+        shell: pwsh
+        run: ./desktop/installer/Build-Installer.ps1 -NodePath (Get-Command node.exe).Source
+      - name: Publicar version completa
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          gh release create $env:RELEASE_TAG dist/WhatsApp-Persona5-Instalar.exe dist/WhatsApp-Persona5-Instalar.exe.sha256 --repo $env:GITHUB_REPOSITORY --target $env:GITHUB_SHA --title "Persona 5 Theme $env:RELEASE_TAG" --notes-file RELEASE_NOTES.md --draft
+          if ($LASTEXITCODE -ne 0) { throw 'No se pudo crear la version' }
+          gh release edit $env:RELEASE_TAG --repo $env:GITHUB_REPOSITORY --draft=false --latest
+          if ($LASTEXITCODE -ne 0) { throw 'No se pudo publicar la version' }

@@ -1,0 +1,7 @@
+dist/
+node_modules/
+desktop/runtime/
+*.log
+*.lnk
+.env
+.env.*

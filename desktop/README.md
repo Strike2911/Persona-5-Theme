@@ -70,3 +70,9 @@ No se garantiza eliminar bloqueos internos de WhatsApp, WebView2 o del controlad
 
 Se conservan los recursos y la licencia GPL-3.0 del proyecto original. Adaptación no oficial, sin afiliación con Meta, Atlus o Sega.
 
+
+### Contraste y modo claro (1.2.1)
+
+`contrast.css` fija la paleta sobre `body` y `#app`, donde WhatsApp define los colores del modo claro/oscuro. Mantiene el aspecto Persona 5 sin modificar la preferencia guardada de WhatsApp. Las citas tienen un fondo opaco y colores propios; el control de opciones no pinta una franja sobre la burbuja.
+
+Comprobación de regresión en una sesión local de desarrollo: `node desktop/dev/verify-contrast.mjs PUERTO`. El chequeo usa elementos temporales fuera de pantalla y compara los colores en ambas clases de tema; restaura el estado original en un bloque `finally`. No escribe ni envía mensajes.

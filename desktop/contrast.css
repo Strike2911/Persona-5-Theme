@@ -1,0 +1,69 @@
+/* Stable palette on the element where WhatsApp selects light/dark mode. */
+html[data-p5-desktop] body,
+html[data-p5-desktop] #app {
+ color-scheme:dark !important;color:#fafafa !important;
+ --WDS-content-default:#fafafa !important;--WDS-content-default-RGB:250,250,250 !important;
+ --WDS-content-deemphasized:#c8c8ce !important;--WDS-content-deemphasized-RGB:200,200,206 !important;
+ --WDS-content-action-default:#fafafa !important;--WDS-content-action-default-RGB:250,250,250 !important;
+ --WDS-content-inverse:#090909 !important;--WDS-content-inverse-RGB:9,9,9 !important;
+ --WDS-content-on-accent:#fff !important;--WDS-content-on-accent-RGB:255,255,255 !important;
+ --WDS-content-action-emphasized:#ff6079 !important;--WDS-content-external-link:#ffb9c5 !important;
+ --WDS-surface-default:#090909 !important;--WDS-surface-default-RGB:9,9,9 !important;
+ --WDS-surface-emphasized:#19191d !important;--WDS-surface-emphasized-RGB:25,25,29 !important;
+ --WDS-surface-elevated-default:#19191d !important;--WDS-surface-elevated-default-RGB:25,25,29 !important;
+ --WDS-surface-elevated-emphasized:#242428 !important;--WDS-surface-elevated-emphasized-RGB:36,36,40 !important;
+ --WDS-background-wash-plain:#090909 !important;--WDS-background-wash-plain-RGB:9,9,9 !important;
+ --WDS-background-wash-inset:#090909 !important;--WDS-background-wash-inset-RGB:9,9,9 !important;
+ --WDS-background-elevated-wash-plain:#19191d !important;--WDS-background-elevated-wash-plain-RGB:25,25,29 !important;
+ --WDS-components-surface-nav-bar:#090909 !important;--WDS-components-surface-nav-bar-RGB:9,9,9 !important;
+ --WDS-systems-chat-surface-composer:#090909 !important;--WDS-systems-chat-surface-composer-RGB:9,9,9 !important;
+ --WDS-systems-chat-surface-tray:#19191d !important;
+ --WDS-systems-bubble-surface-incoming:#090909 !important;--WDS-systems-bubble-surface-incoming-RGB:9,9,9 !important;
+ --WDS-systems-bubble-surface-outgoing:#fffdf7 !important;--WDS-systems-bubble-surface-outgoing-RGB:255,253,247 !important;
+ --WDS-systems-bubble-surface-system:#19191d !important;--WDS-systems-bubble-surface-system-RGB:25,25,29 !important;
+ --WDS-systems-bubble-content-deemphasized:#c8c8ce !important;--WDS-systems-bubble-content-deemphasized-RGB:200,200,206 !important;
+ --primary:#fafafa !important;--secondary:#c8c8ce !important;--primary-strong:#fff !important;
+ --text-primary:#fafafa !important;--text-secondary:#c8c8ce !important;--text-muted:#babac2 !important;
+ --icon:#d8d8df !important;--icon-strong:#fff !important;--icon-lighter:#d8d8df !important;
+ --panel-background:#090909 !important;--panel-background-lighter:#19191d !important;--panel-background-deep:#090909 !important;
+ --dropdown-background:#19191d !important;--dropdown-background-hover:#38202a !important;
+ --input-background:#090909 !important;--input-placeholder:#babac2 !important;
+ --search-input-background:#090909 !important;--search-input-container-background:#090909 !important;
+ --incoming-background:#090909 !important;--incoming-background-rgb:9,9,9 !important;
+ --outgoing-background:#fffdf7 !important;--outgoing-background-rgb:255,253,247 !important;
+ --incoming-primary:#fff !important;--outgoing-primary:#090909 !important;
+ --message-primary:#fff !important;--quoted-message-text:#fff !important;--quoted-message-background:#1c1b20 !important;
+ --bubble-meta:#bdbdc5 !important;--bubble-meta-icon:#bdbdc5 !important;
+}
+html[data-p5-desktop] #main [data-testid="msg-container"] >.x1ew7x2d {color:#fff !important}
+html[data-p5-desktop] #main [data-testid="msg-container"] >.x1g5lz36 {
+ color:#090909 !important;
+ --WDS-content-default:#090909 !important;--WDS-content-default-RGB:9,9,9 !important;
+ --WDS-content-deemphasized:#42424a !important;--WDS-content-deemphasized-RGB:66,66,74 !important;
+ --WDS-systems-bubble-content-deemphasized:#42424a !important;--WDS-systems-bubble-content-deemphasized-RGB:66,66,74 !important;
+ --bubble-meta:#42424a !important;--bubble-meta-icon:#42424a !important;
+}
+/* Quotes need an opaque surface even when attached to a transparent sticker. */
+html[data-p5-desktop] #main [data-testid="quoted-message"] {
+ background:#1c1b20 !important;color:#fff !important;
+ border:1px solid #57545c !important;border-inline-start:4px solid #ed1237 !important;
+ border-radius:0 !important;box-sizing:border-box;
+ --WDS-content-default:#fff !important;--WDS-content-default-RGB:255,255,255 !important;
+ --WDS-content-deemphasized:#e0dfe4 !important;
+}
+html[data-p5-desktop] #main [data-testid="quoted-message"] :is(div,span,a) {color:#fff !important}
+html[data-p5-desktop] #main [data-testid="quoted-message"] [data-testid="author"] {color:#ff8299 !important}
+html[data-p5-desktop] #main [data-testid="quoted-message"] a {color:#ffe769 !important}
+/* Keep the native options control, remove its rectangular hover wash. */
+html[data-p5-desktop] #main div:has(>[data-testid="icon-down-context"]),
+html[data-p5-desktop] #main div:has(>[data-testid="icon-down-context"])::before,
+html[data-p5-desktop] #main div:has(>[data-testid="icon-down-context"])::after {
+ background:transparent !important;box-shadow:none !important;
+}
+html[data-p5-desktop] #main [data-testid="icon-down-context"] {
+ background:#090909 !important;color:#fff !important;box-shadow:none !important;
+ border:1px solid #fff !important;border-radius:0 !important;
+ clip-path:polygon(3px 0,100% 0,calc(100% - 3px) 100%,0 100%);
+}
+html[data-p5-desktop] #main [data-testid="icon-down-context"] :is(div,span,button) {background:transparent !important;color:#fff !important;box-shadow:none !important}
+html[data-p5-desktop] #main [data-testid="icon-down-context"] svg {color:#fff !important}

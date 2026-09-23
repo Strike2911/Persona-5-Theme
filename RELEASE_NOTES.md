@@ -1,11 +1,11 @@
-# Persona 5 Theme 1.2.0
+# Persona 5 Theme 1.2.1
 
-- Instalador de un solo archivo con pasos guiados.
-- Avisos de nuevas versiones al abrir el tema, como máximo una vez al día.
-- Nuevo acceso «Buscar actualizaciones» para comprobar manualmente.
-- Retratos a color, stickers sin marcos sobrantes y rótulo CHAT con letras vectoriales.
-- Corregido el retrato anterior que aparecía al abrir un contacto sin foto de perfil.
+- Respuestas citadas con fondo sólido y texto legible, también al responder con stickers.
+- Eliminada la franja del control de opciones al pasar el mouse; mantiene un botón negro con borde blanco.
+- Paleta del tema independiente del modo claro u oscuro de WhatsApp, con colores explícitos para mensajes enviados, recibidos, citas, paneles e iconos.
 
-Descarga **WhatsApp-Persona5-Instalar.exe** y sigue las instrucciones. Requiere Windows x64 y WhatsApp oficial de Microsoft Store. Instalador no firmado digitalmente.
+Descarga **WhatsApp-Persona5-Instalar.exe** y sigue los pasos para actualizar. No necesitas desinstalar la versión anterior.
 
-**Si usabas 1.0 o 1.1, instala esta versión una vez para empezar a recibir avisos.** Los avisos abren la página de la nueva versión; la instalación siempre la inicia el usuario.
+Requiere Windows x64 y WhatsApp oficial de Microsoft Store. Instalador no firmado digitalmente.
+
+Los usuarios de 1.2.0 reciben el aviso al abrir el tema (como máximo una comprobación al día), o pueden usar «Buscar actualizaciones». Quienes usen 1.0 o 1.1 deben instalar esta versión manualmente una vez.

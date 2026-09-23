@@ -5,6 +5,7 @@ export async function buildSource(lite = false) {
   let css = await readFile(new URL('./persona.css', import.meta.url), 'utf8');
   css += '\n' + await readFile(new URL('./persona-v2.css', import.meta.url), 'utf8');
   css += '\n' + await readFile(new URL('./comic.css', import.meta.url), 'utf8');
+  css += '\n' + await readFile(new URL('./contrast.css', import.meta.url), 'utf8');
   const wallpaper = await readFile(new URL('./assets/city-mono.jpg', import.meta.url));
   css += '\nhtml[data-p5-desktop]{--p5-wallpaper:url("data:image/jpeg;base64,' + wallpaper.toString('base64') + '")}';
   const assets = [];

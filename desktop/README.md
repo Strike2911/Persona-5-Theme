@@ -76,3 +76,11 @@ Se conservan los recursos y la licencia GPL-3.0 del proyecto original. Adaptaci�
 `contrast.css` fija la paleta sobre `body` y `#app`, donde WhatsApp define los colores del modo claro/oscuro. Mantiene el aspecto Persona 5 sin modificar la preferencia guardada de WhatsApp. Las citas tienen un fondo opaco y colores propios; el control de opciones no pinta una franja sobre la burbuja.
 
 Comprobación de regresión en una sesión local de desarrollo: `node desktop/dev/verify-contrast.mjs PUERTO`. El chequeo usa elementos temporales fuera de pantalla y compara los colores en ambas clases de tema; restaura el estado original en un bloque `finally`. No escribe ni envía mensajes.
+
+### Inicio automático (1.2.2)
+
+El instalador permite marcar **Abrir WhatsApp con Persona 5 al iniciar Windows**. Crea únicamente un acceso `WhatsApp Persona 5.lnk` en la carpeta Inicio del usuario, apuntando al lanzador con `-Startup`. Espera ocho segundos antes de activar WhatsApp para dar tiempo a la restauración de apps de Windows. No añade servicios ni vigila procesos continuamente.
+
+Para desactivarlo, desmarca esa opción al volver a ejecutar el instalador, deshabilita la entrada de inicio en Windows o ejecuta `desktop/Set-Startup.ps1 -Disable`. «Restaurar normal» desactiva la sesión actual de depuración; si el inicio automático sigue activo, volverá a aplicar el tema en el próximo inicio de sesión de Windows.
+
+Los accesos originales de WhatsApp no se interceptan. Si el proceso está cerrado y se abre el icono oficial, puede iniciar sin tema. Usa el acceso Persona 5 para abrirlo manualmente. Durante la carga puede verse brevemente el aspecto original.

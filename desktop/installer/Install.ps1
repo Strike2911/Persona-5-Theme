@@ -1,4 +1,4 @@
-param([switch]$CheckOnly, [switch]$Silent)
+param([switch]$CheckOnly, [switch]$Silent, [ValidateSet('Keep','Enable','Disable')][string]$StartupMode='Keep')
 $ErrorActionPreference = 'Stop'
 try {
     $payload = Join-Path $PSScriptRoot 'payload'
@@ -32,6 +32,8 @@ Deseas instalarlo?
         Copy-Item -LiteralPath (Join-Path $payload $entry.path) -Destination $target -Force
     }
     & (Join-Path $destination 'desktop\Install-Shortcuts.ps1') | Out-Null
+    if ($StartupMode -eq 'Enable') { & (Join-Path $destination 'desktop\Set-Startup.ps1') | Out-Null }
+    if ($StartupMode -eq 'Disable') { & (Join-Path $destination 'desktop\Set-Startup.ps1') -Disable | Out-Null }
     if (!$Silent) { [System.Windows.Forms.MessageBox]::Show('Instalado. Abre WhatsApp Persona 5 desde el escritorio. El modo Ligero desactiva animaciones. Para volver a WhatsApp sin depuracion, usa Restaurar normal.','Instalacion completa','OK','Information') | Out-Null }
 } catch {
     if ($CheckOnly -or $Silent) { Write-Error $_; exit 1 }

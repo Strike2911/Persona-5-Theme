@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 static class Bundle {
  public static string Destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Programs\WhatsAppPersona5\desktop");
- public static void Run(bool verify) {
+ public static void Run(bool verify, bool autoStart = true) {
   string temp = Path.Combine(Path.GetTempPath(), "WhatsAppPersona5-" + Guid.NewGuid().ToString("N"));
   Directory.CreateDirectory(temp);
   try {
@@ -18,7 +18,7 @@ static class Bundle {
    using(var output=File.Create(zip)) { if(source==null)throw new Exception("El instalador está incompleto. Descárgalo de nuevo."); source.CopyTo(output); }
    string unpack=Path.Combine(temp,"unpack");
    ZipFile.ExtractToDirectory(zip,unpack);
-   var psi = new ProcessStartInfo(PowerShell(), "-NoProfile -ExecutionPolicy Bypass -File \""+Path.Combine(unpack,"Install.ps1")+"\" "+(verify?"-CheckOnly":"-Silent"));
+   var psi = new ProcessStartInfo(PowerShell(), "-NoProfile -ExecutionPolicy Bypass -File \""+Path.Combine(unpack,"Install.ps1")+"\" "+(verify?"-CheckOnly":"-Silent -StartupMode "+(autoStart?"Enable":"Disable")));
    psi.EnvironmentVariables["PSModulePath"]=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System),@"WindowsPowerShell\v1.0\Modules"); psi.UseShellExecute=false; psi.CreateNoWindow=true; psi.RedirectStandardError=true; psi.RedirectStandardOutput=true;
    using(var p=Process.Start(psi)) {
     var stdout=p.StandardOutput.ReadToEndAsync(); var stderr=p.StandardError.ReadToEndAsync();
@@ -34,7 +34,7 @@ static class Bundle {
 }
 class Installer : Form {
  readonly Color red=Color.FromArgb(224,5,37);
- Panel content; Label step; Button next,back; CheckBox consent; ProgressBar progress; int page=0; bool busy=false;
+ Panel content; Label step; Button next,back; CheckBox consent, startupChoice; bool autoStart=true; ProgressBar progress; int page=0; bool busy=false;
  public Installer() {
   Text="WhatsApp Persona 5 · Instalador"; ClientSize=new Size(740,540); MinimumSize=Size; MaximumSize=Size;
   StartPosition=FormStartPosition.CenterScreen; FormBorderStyle=FormBorderStyle.FixedSingle; MaximizeBox=false;
@@ -65,9 +65,10 @@ class Installer : Form {
    Label("Una cosa que debes saber",0,40,20,true);
    Label("El tema abre WhatsApp con una conexión de depuración local.\nPermite cambiar su aspecto, pero otros programas de tu PC\npodrían acceder a esa ventana mientras esté abierta.",55,85,12,false);
    Label("Para desactivarla, usa «WhatsApp - Restaurar normal».\nCerrar solo la ventana puede dejar WhatsApp en la bandeja.\nSe consulta GitHub al abrir el tema para avisar de actualizaciones.",151,80,11,false);
-   consent=new CheckBox {Text="Entiendo y quiero instalar el tema en este equipo.",Location=new Point(0,245),Size=new Size(675,38),ForeColor=Color.White};
+   consent=new CheckBox {Text="Entiendo y quiero instalar el tema en este equipo.",Location=new Point(0,235),Size=new Size(675,30),ForeColor=Color.White};
    consent.CheckedChanged+=(s,e)=>next.Enabled=consent.Checked;content.Controls.Add(consent);
-   Label("Proyecto no oficial. Las actualizaciones de WhatsApp pueden requerir\nuna nueva versión del tema. No requiere permisos de administrador.",293,45,9,false);
+   startupChoice=new CheckBox {Text="Abrir WhatsApp con Persona 5 al iniciar Windows",Checked=autoStart,Location=new Point(0,272),Size=new Size(675,30),ForeColor=Color.White}; startupChoice.CheckedChanged+=(s,e)=>autoStart=startupChoice.Checked;content.Controls.Add(startupChoice);
+   Label("Proyecto no oficial. No requiere permisos de administrador.",310,28,9,false);
   } else if(page==2) {
    step.Text="3 / 3   INSTALANDO";next.Text="Instalando…";next.Enabled=false;back.Enabled=false;
    Label("Estamos preparando todo",0,44,21,true);
@@ -85,7 +86,7 @@ class Installer : Form {
   if(page==3) {try {Bundle.Launch();Close();}catch(Exception error){MessageBox.Show(error.Message,"No se pudo abrir WhatsApp");}return;}
   if(page!=1||!consent.Checked)return;
   busy=true;page=2;Render();var worker=new BackgroundWorker();
-  worker.DoWork+=(s,a)=>Bundle.Run(false);
+  worker.DoWork+=(s,a)=>Bundle.Run(false,autoStart);
   worker.RunWorkerCompleted+=(s,a)=>{
    busy=false;
    if(a.Error!=null){page=1;Render();MessageBox.Show("No se completó la instalación. Comprueba que tienes WhatsApp de Microsoft Store instalado.\n\nDetalle:\n"+a.Error.Message,"No se pudo instalar",MessageBoxButtons.OK,MessageBoxIcon.Information);}
@@ -101,6 +102,7 @@ static class Setup {
   Application.Run(new Installer());return 0;
  }
 }
+
 
 
 

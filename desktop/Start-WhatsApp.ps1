@@ -1,5 +1,7 @@
-param([switch]$Normal, [switch]$Lite)
+param([switch]$Normal, [switch]$Lite, [switch]$Startup)
 $ErrorActionPreference = 'Stop'
+# Let Windows finish restoring startup apps before taking over the WhatsApp session.
+if ($Startup) { Start-Sleep -Seconds 8 }
 $launchLock = [System.Threading.Mutex]::new($false, 'Local\WhatsAppPersona5Launcher')
 if (!$launchLock.WaitOne(0)) { $launchLock.Dispose(); exit }
 try {

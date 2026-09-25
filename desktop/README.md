@@ -79,8 +79,10 @@ Comprobación de regresión en una sesión local de desarrollo: `node desktop/de
 
 ### Inicio automático (1.2.2)
 
-El instalador permite marcar **Abrir WhatsApp con Persona 5 al iniciar Windows**. Crea únicamente un acceso `WhatsApp Persona 5.lnk` en la carpeta Inicio del usuario, apuntando al lanzador con `-Startup`. Espera ocho segundos antes de activar WhatsApp para dar tiempo a la restauración de apps de Windows. No añade servicios ni vigila procesos continuamente.
+El instalador permite marcar **Abrir WhatsApp con Persona 5 al iniciar Windows**. Crea únicamente un acceso `WhatsApp Persona 5.lnk` en la carpeta Inicio del usuario, apuntando al lanzador con `-Startup`. Espera treinta segundos antes de activar WhatsApp para dar tiempo a la restauración de apps de Windows. No añade servicios ni vigila procesos continuamente.
 
 Para desactivarlo, desmarca esa opción al volver a ejecutar el instalador, deshabilita la entrada de inicio en Windows o ejecuta `desktop/Set-Startup.ps1 -Disable`. «Restaurar normal» desactiva la sesión actual de depuración; si el inicio automático sigue activo, volverá a aplicar el tema en el próximo inicio de sesión de Windows.
 
 Los accesos originales de WhatsApp no se interceptan. Si el proceso está cerrado y se abre el icono oficial, puede iniciar sin tema. Usa el acceso Persona 5 para abrirlo manualmente. Durante la carga puede verse brevemente el aspecto original.
+
+El lanzador registra etapas y errores técnicos en %LOCALAPPDATA%\WhatsAppPersona5\launch.log (sin conversaciones). El arranque con -Startup permite hasta 90 segundos para que aparezca la página de WhatsApp. Un fallo al restaurar la app normal también queda registrado y no oculta el error original.

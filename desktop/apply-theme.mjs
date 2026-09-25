@@ -78,9 +78,9 @@ export async function buildSource(lite = false) {
   })();`;
 }
 
-export async function applyTheme(port, lite = false) {
+export async function applyTheme(port, lite = false, startup = false) {
   const source = await buildSource(lite);
-  const deadline = Date.now() + 35000;
+  const deadline = Date.now() + (startup ? 90000 : 35000);
   let client;
   let lastError;
   while (Date.now() < deadline) {
@@ -113,7 +113,7 @@ export async function applyTheme(port, lite = false) {
 }
 
 if (process.argv[2]) {
-  await applyTheme(Number(process.argv[2]), process.argv.includes('--lite')).catch(error => {
+  await applyTheme(Number(process.argv[2]), process.argv.includes('--lite'), process.argv.includes('--startup')).catch(error => {
     console.error(error.message);
     process.exitCode = 1;
   });

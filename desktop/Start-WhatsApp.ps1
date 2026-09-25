@@ -1,10 +1,25 @@
 param([switch]$Normal, [switch]$Lite, [switch]$Startup)
 $ErrorActionPreference = 'Stop'
-# Let Windows finish restoring startup apps before taking over the WhatsApp session.
-if ($Startup) { Start-Sleep -Seconds 8 }
+$logDirectory = Join-Path $env:LOCALAPPDATA 'WhatsAppPersona5'
+$logPath = Join-Path $logDirectory 'launch.log'
+function Write-LaunchLog([string]$Message) {
+    try {
+        New-Item -ItemType Directory -Path $logDirectory -Force | Out-Null
+        if ((Test-Path $logPath) -and (Get-Item $logPath).Length -gt 131072) {
+            Move-Item -LiteralPath $logPath -Destination ($logPath + '.previous') -Force
+        }
+        Add-Content -LiteralPath $logPath -Value ((Get-Date -Format o) + ' ' + $Message) -Encoding UTF8
+    } catch { } # Diagnostics must never prevent launching.
+}
+Write-LaunchLog "Launch requested; startup=$Startup; normal=$Normal"
+# Allow Windows time to restore Store apps and their WebView processes.
+if ($Startup) { Start-Sleep -Seconds 30 }
 $launchLock = [System.Threading.Mutex]::new($false, 'Local\WhatsAppPersona5Launcher')
-if (!$launchLock.WaitOne(0)) { $launchLock.Dispose(); exit }
+$ownsLock = $false
 try {
+    try { $ownsLock = $launchLock.WaitOne(0) }
+    catch [System.Threading.AbandonedMutexException] { $ownsLock = $true }
+    if (!$ownsLock) { Write-LaunchLog 'Another launcher is active.'; return }
     if (!$Normal) {
         $node = Join-Path $PSScriptRoot 'runtime\node.exe'
         if (!(Test-Path -LiteralPath $node)) { $node = (Get-Command node.exe -ErrorAction Stop).Source }
@@ -27,16 +42,19 @@ try {
     # Closing the window can leave WhatsApp in the tray; end only its host.
     Get-Process WhatsApp.Root -ErrorAction SilentlyContinue | Stop-Process
     Start-Sleep -Milliseconds 1200
+    Write-LaunchLog 'Activating official WhatsApp.'
     $started = & "$PSScriptRoot\Activate-WhatsApp.ps1" -Port $port | ConvertFrom-Json
     if (!$Normal) {
         $extra = @()
         if ($Lite) { $extra += '--lite' }
-        & $node "$PSScriptRoot\apply-theme.mjs" "$port" @extra
+        if ($Startup) { $extra += '--startup' }
+        & $node "$PSScriptRoot\apply-theme.mjs" "$port" @extra 2>&1 | ForEach-Object { Write-LaunchLog ([string]$_) }
         if ($LASTEXITCODE -ne 0) { throw 'WhatsApp no permitio aplicar el tema. Se abrira normalmente.' }
         $binding = Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction Stop
         if (@($binding | Where-Object { $_.LocalAddress -notin @('127.0.0.1', '::1') }).Count -gt 0) {
             throw 'La conexion de depuracion no esta limitada al equipo.'
         }
+        Write-LaunchLog 'Theme verified; debug listener limited to loopback.'
         # A separate, short-lived check never delays opening WhatsApp.
         try {
             $updateScript = Join-Path $PSScriptRoot 'Update-WhatsApp.ps1'
@@ -47,16 +65,19 @@ try {
     }
 } catch {
     $reason = $_.Exception.Message
+    Write-LaunchLog ('Failed: ' + $reason + '; HRESULT=' + $_.Exception.HResult)
     # Fail closed: no debug session left behind if applying the theme fails.
     if ($restartAttempted) {
-        Get-Process WhatsApp.Root -ErrorAction SilentlyContinue | Stop-Process
-        Start-Sleep -Milliseconds 1200
-        & "$PSScriptRoot\Activate-WhatsApp.ps1" -Port 0 | Out-Null
+        try {
+            Get-Process WhatsApp.Root -ErrorAction SilentlyContinue | Stop-Process
+            Start-Sleep -Milliseconds 1200
+            & "$PSScriptRoot\Activate-WhatsApp.ps1" -Port 0 | Out-Null
+        } catch { Write-LaunchLog ('Normal activation also failed: ' + $_.Exception.Message) }
     }
     Add-Type -AssemblyName System.Windows.Forms
-    [System.Windows.Forms.MessageBox]::Show($reason, 'WhatsApp Persona 5') | Out-Null
+    [System.Windows.Forms.MessageBox]::Show(($reason + "`n`nRegistro del arranque: " + $logPath), 'WhatsApp Persona 5') | Out-Null
     exit 1
 } finally {
-    $launchLock.ReleaseMutex()
+    if ($ownsLock) { $launchLock.ReleaseMutex() }
     $launchLock.Dispose()
 }

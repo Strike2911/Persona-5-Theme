@@ -13,9 +13,13 @@ function environment(origin = 'https://web.whatsapp.com', readyState = 'complete
   const elements = new Map();
   const attributes = new Map();
   const listeners = new Map();
-  const window = {}; window.top = window;
+  const windowListeners = new Map();
+  const window = {
+    addEventListener:(name,fn)=>windowListeners.set(name,fn),
+    removeEventListener:(name,fn)=>{if(windowListeners.get(name)===fn) windowListeners.delete(name);}
+  }; window.top = window;
   return {
-    location:{origin}, window, elements, attributes, listeners,
+    location:{origin}, window, elements, attributes, listeners, windowListeners,
     document:{readyState,
       querySelector:() => null,
       getElementById:id => elements.get(id),
@@ -71,7 +75,7 @@ test('el retrato observa solo la cabecera y libera el observador al reaplicar', 
   vm.runInNewContext(source,context);
   assert.equal(observers.filter(o=>o.active).length,1);
   assert.equal(observers.at(-1).target,header);
-  assert.equal(context.listeners.size,1);
+  assert.equal(context.listeners.size,3);
   photo=null;
   observers.at(-1).callback();
   assert.equal(properties.get('--p5-contact-portrait'),'none');
@@ -101,4 +105,38 @@ test('reemplazar la cabecera por un contacto sin foto elimina el retrato anterio
   assert.equal(properties.get('--p5-contact-portrait'),'none');
   context.window.__p5DesktopCleanup();
   assert.equal(observers.filter(o=>o.active).length,0);
+});
+
+test('actualizaciones de presencia no reescriben el retrato si la foto no cambia', async () => {
+  const context=environment(); const callbacks=[]; let writes=0;
+  const header={}; let src='blob:same';
+  context.document.querySelector=s=>s.endsWith(' img')?{getAttribute:()=>src}:s.includes('conversation-header')?header:null;
+  context.document.documentElement.style.setProperty=()=>writes++;
+  context.MutationObserver=class {
+    constructor(callback){callbacks.push(callback);} observe(){} disconnect(){}
+  };
+  vm.runInNewContext(await buildSource(),context);
+  for(let i=0;i<100;i++) callbacks[0]();
+  assert.equal(writes,1);
+  src=null; callbacks[0](); assert.equal(writes,2);
+});
+
+test('volver al foco descarta entradas pendientes sin tocar animaciones nativas', async () => {
+  const context=environment(); let cancelled=0; let nativeCancelled=0;
+  const entry={animationName:'p5-message-in',playState:'running',cancel(){cancelled++;}};
+  context.document.getAnimations=()=>[entry,{animationName:'native-spinner',playState:'running',cancel(){nativeCancelled++;}}];
+  vm.runInNewContext(await buildSource(),context);
+  context.windowListeners.get('focus')();
+  assert.equal(cancelled,1); assert.equal(nativeCancelled,0);
+  context.document.hidden=true;
+  const event={animationName:'p5-message-in',target:{getAnimations:()=>[entry]}};
+  context.listeners.get('animationstart')(event);
+  assert.equal(cancelled,2);
+  context.document.hidden=false; context.document.hasFocus=()=>true;
+  context.listeners.get('animationstart')(event);
+  assert.equal(cancelled,2); // New foreground messages retain their entry effect.
+  vm.runInNewContext(await buildSource(),context);
+  assert.equal(context.windowListeners.size,1);
+  context.window.__p5DesktopCleanup();
+  assert.equal(context.listeners.size,0); assert.equal(context.windowListeners.size,0);
 });

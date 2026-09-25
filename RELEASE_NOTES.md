@@ -1,8 +1,11 @@
-# Persona 5 Theme 1.2.2
+# Persona 5 Theme 1.2.3
 
-- Nueva opción del instalador: **Abrir WhatsApp con Persona 5 al iniciar Windows**.
-- El inicio automático espera unos segundos a que Windows termine de cargar y abre la app oficial mediante el lanzador del tema.
-- La casilla puede desmarcarse al instalar o actualizar para quitar el inicio automático del tema.
+- Al volver a WhatsApp, se descartan las animaciones de entrada pendientes del tema. Los mensajes nuevos conservan su animación con la ventana activa.
+- Las actualizaciones de estado del contacto ya no reescriben el retrato si la foto no cambió.
+- Las animaciones de cabecera y portada liberan su efecto al terminar.
+- El inicio automático espera 30 segundos y permite más tiempo de carga. Incluye un registro local de errores técnicos, sin conversaciones.
+
+Estos cambios reducen trabajo del tema; no garantizan eliminar bloqueos internos de WhatsApp ni los causados por falta de recursos del equipo.
 
 Descarga **WhatsApp-Persona5-Instalar.exe** y sigue los pasos. No necesitas desinstalar la versión anterior.
 

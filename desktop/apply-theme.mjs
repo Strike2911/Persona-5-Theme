@@ -33,11 +33,15 @@ export async function buildSource(lite = false) {
       let photoObserver;
       let structureObserver;
       let observedHeader;
+      let lastPortrait;
       function portrait() {
         const photo = document.querySelector('[data-testid="conversation-header"] img');
         const src = photo?.getAttribute('src');
-        document.documentElement.style.setProperty('--p5-contact-portrait',
-          src ? 'url(' + JSON.stringify(src) + ')' : 'none');
+        const value = src ? 'url(' + JSON.stringify(src) + ')' : 'none';
+        if (value !== lastPortrait) {
+          document.documentElement.style.setProperty('--p5-contact-portrait', value);
+          lastPortrait = value;
+        }
       }
       function loaded(event) {
         if (event.target.matches?.('[data-testid="conversation-header"] img')) bindPortrait();
@@ -66,8 +70,26 @@ export async function buildSource(lite = false) {
         portrait();
       }
       document.addEventListener('load', loaded, true);
+      // Discard only our entrance effects when returning to the app.
+      // Never replay a backlog, pause native media, or observe message mutations.
+      const entrances = new Set(['p5-message-in', 'p5-cut-in', 'p5-title-in']);
+      function finishEntrances(target = document) {
+        for (const animation of target.getAnimations?.() || []) {
+          if (entrances.has(animation.animationName) && animation.playState !== 'finished') animation.cancel();
+        }
+      }
+      function resumed() { finishEntrances(); }
+      function backgroundEntrance(event) {
+        if (entrances.has(event.animationName) && (document.hidden || !document.hasFocus())) finishEntrances(event.target);
+      }
+      window.addEventListener('focus', resumed);
+      document.addEventListener('visibilitychange', resumed);
+      document.addEventListener('animationstart', backgroundEntrance);
       window.__p5DesktopCleanup = () => {
         document.removeEventListener('load', loaded, true);
+        window.removeEventListener('focus', resumed);
+        document.removeEventListener('visibilitychange', resumed);
+        document.removeEventListener('animationstart', backgroundEntrance);
         photoObserver?.disconnect();
         structureObserver?.disconnect();
       };

@@ -86,3 +86,7 @@ Para desactivarlo, desmarca esa opción al volver a ejecutar el instalador, desh
 Los accesos originales de WhatsApp no se interceptan. Si el proceso está cerrado y se abre el icono oficial, puede iniciar sin tema. Usa el acceso Persona 5 para abrirlo manualmente. Durante la carga puede verse brevemente el aspecto original.
 
 El lanzador registra etapas y errores técnicos en %LOCALAPPDATA%\WhatsAppPersona5\launch.log (sin conversaciones). El arranque con -Startup permite hasta 90 segundos para que aparezca la página de WhatsApp. Un fallo al restaurar la app normal también queda registrado y no oculta el error original.
+
+### Cambio de ventana (1.2.3)
+
+Al recuperar el foco o cambiar la visibilidad, el tema descarta únicamente sus animaciones de entrada pendientes. Las entradas creadas sin foco se descartan; los mensajes nuevos con foco conservan el efecto Persona 5. No se pausan vídeos ni animaciones nativas. No se añaden temporizadores ni observadores a la lista de mensajes. Los manejadores se liberan al reaplicar el tema. El retrato solo modifica la variable CSS cuando cambia la foto.

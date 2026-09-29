@@ -37,6 +37,7 @@ class Installer : Form {
  Panel content; Label step; Button next,back; CheckBox consent, startupChoice; bool autoStart=true; ProgressBar progress; int page=0; bool busy=false;
  public Installer() {
   Text="WhatsApp Persona 5 · Instalador"; ClientSize=new Size(740,540); MinimumSize=Size; MaximumSize=Size;
+  Icon=System.Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath);
   StartPosition=FormStartPosition.CenterScreen; FormBorderStyle=FormBorderStyle.FixedSingle; MaximizeBox=false;
   AutoScaleMode=AutoScaleMode.Dpi; Font=new Font("Segoe UI",10); BackColor=Color.FromArgb(15,15,18); ForeColor=Color.White;
   var banner=new Panel {Dock=DockStyle.Top,Height=98,BackColor=red}; Controls.Add(banner);

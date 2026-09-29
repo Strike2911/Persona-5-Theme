@@ -1,11 +1,15 @@
 import {readFile} from 'node:fs/promises';
 import {connect} from './cdp.mjs';
+import {installEffects, createMessageTracker} from './effects.mjs';
 
 export async function buildSource(lite = false) {
   let css = await readFile(new URL('./persona.css', import.meta.url), 'utf8');
   css += '\n' + await readFile(new URL('./persona-v2.css', import.meta.url), 'utf8');
   css += '\n' + await readFile(new URL('./comic.css', import.meta.url), 'utf8');
   css += '\n' + await readFile(new URL('./contrast.css', import.meta.url), 'utf8');
+  css += '\n' + await readFile(new URL('./effects.css', import.meta.url), 'utf8');
+  const sounds={};
+  for(const name of ['chat','other']) sounds[name]='data:audio/mpeg;base64,'+(await readFile(new URL('./assets/message-'+name+'.mp3',import.meta.url))).toString('base64');
   const wallpaper = await readFile(new URL('./assets/city-mono.jpg', import.meta.url));
   css += '\nhtml[data-p5-desktop]{--p5-wallpaper:url("data:image/jpeg;base64,' + wallpaper.toString('base64') + '")}';
   const assets = [];
@@ -30,11 +34,13 @@ export async function buildSource(lite = false) {
       document.documentElement.toggleAttribute('data-p5-lite', ${JSON.stringify(lite)});
       // Observe only the small header, never the message tree. Reuse its photo.
       window.__p5DesktopCleanup?.();
+      const effects = (${installEffects.toString()})(${JSON.stringify(sounds)}, ${createMessageTracker.toString()});
       let photoObserver;
       let structureObserver;
       let observedHeader;
       let lastPortrait;
       function portrait() {
+        effects.bind();
         const photo = document.querySelector('[data-testid="conversation-header"] img');
         const src = photo?.getAttribute('src');
         const value = src ? 'url(' + JSON.stringify(src) + ')' : 'none';
@@ -86,6 +92,7 @@ export async function buildSource(lite = false) {
       document.addEventListener('visibilitychange', resumed);
       document.addEventListener('animationstart', backgroundEntrance);
       window.__p5DesktopCleanup = () => {
+        effects.cleanup();
         document.removeEventListener('load', loaded, true);
         window.removeEventListener('focus', resumed);
         document.removeEventListener('visibilitychange', resumed);

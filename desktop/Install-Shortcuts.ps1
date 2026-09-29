@@ -1,6 +1,8 @@
 $ErrorActionPreference = 'Stop'
 $shell = New-Object -ComObject WScript.Shell
 $desktop = [Environment]::GetFolderPath('Desktop')
+$startMenu = Join-Path ([Environment]::GetFolderPath('Programs')) 'WhatsApp Persona 5'
+New-Item -ItemType Directory -Path $startMenu -Force | Out-Null
 $package = Get-AppxPackage 5319275A.WhatsAppDesktop
 foreach ($entry in @(
     @{Name='WhatsApp Persona 5';Args='';Description='WhatsApp oficial con tema Persona 5 y efectos breves'},
@@ -14,8 +16,10 @@ foreach ($entry in @(
     $shortcut.Arguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + (Join-Path $PSScriptRoot $scriptName) + '"' + $entry.Args
     $shortcut.WorkingDirectory = $PSScriptRoot
     $shortcut.Description = $entry.Description
-    if ($package) { $shortcut.IconLocation = (Join-Path $package.InstallLocation 'WhatsApp.Root.exe') + ',0' }
+    if ($entry.Args -ne ' -Normal') { $shortcut.IconLocation = (Join-Path $PSScriptRoot 'assets\persona.ico') + ',0' }
+    elseif ($package) { $shortcut.IconLocation = (Join-Path $package.InstallLocation 'WhatsApp.Root.exe') + ',0' }
     $shortcut.Save()
+    Copy-Item -LiteralPath (Join-Path $desktop ($entry.Name + '.lnk')) -Destination (Join-Path $startMenu ($entry.Name + '.lnk')) -Force
     Write-Output (Join-Path $desktop ($entry.Name + '.lnk'))
 }
 [void][System.Runtime.InteropServices.Marshal]::ReleaseComObject($shell)

@@ -6,7 +6,7 @@ Aplica el tema a **la aplicación oficial instalada desde Microsoft Store**, usa
 
 Los accesos del escritorio ejecutan `Start-WhatsApp.ps1`:
 
-- **WhatsApp Persona 5**: rediseño inspirado en el menú del teléfono de Persona 5, con entrada de mensajes de 360 ms y selección de 140 ms.
+- **WhatsApp Persona 5**: rediseño inspirado en el menú del teléfono de Persona 5, con entrada de mensajes nuevos de 240 ms y selección de 140 ms.
 - **WhatsApp Persona 5 - Ligero**: el mismo tema sin esas transiciones.
 - **WhatsApp - Restaurar normal**: reinicia la aplicación sin tema ni depuración.
 
@@ -90,3 +90,17 @@ El lanzador registra etapas y errores técnicos en %LOCALAPPDATA%\WhatsAppPerson
 ### Cambio de ventana (1.2.3)
 
 Al recuperar el foco o cambiar la visibilidad, el tema descarta únicamente sus animaciones de entrada pendientes. Las entradas creadas sin foco se descartan; los mensajes nuevos con foco conservan el efecto Persona 5. No se pausan vídeos ni animaciones nativas. No se añaden temporizadores ni observadores a la lista de mensajes. Los manejadores se liberan al reaplicar el tema. El retrato solo modifica la variable CSS cuando cambia la foto.
+
+### Sonidos, entradas e icono (1.3.0)
+
+Busca **WhatsApp Persona 5** en Inicio: tiene el icono proporcionado por el usuario y abre con tema. También está en el escritorio. La entrada oficial «WhatsApp», la ventana nativa y la identidad de su paquete permanecen independientes.
+
+Los audios `assets/message-chat.mp3` y `assets/message-other.mp3` fueron proporcionados por el usuario. El primero se usa al seleccionar chats/controles y recibir un mensaje nuevo identificable en el chat enfocado. El segundo sustituye únicamente el recurso de aviso `https://static.whatsapp.net/rsrc.php/yW/r/BS_BUUXbKq5.mp3` cuando WhatsApp lo reproduce. El resto de audio, llamadas y notas de voz pasa al método original. No se modifican permisos ni ajustes de notificaciones. Si WhatsApp cambia ese recurso o utiliza avisos de Windows, puede volver a oírse su sonido original. Mantén activos los sonidos de mensajes de WhatsApp para que genere esos avisos.
+
+El control **♪ P5** permite silenciar, ajustar volumen y probar. WebView2 puede exigir un primer clic para reproducir audio; no se elude esa política. Las preferencias locales solo contienen sonido, clics y volumen. Los IDs de mensajes se conservan temporalmente en memoria con límite de 2000, sin guardar texto ni enviar datos.
+
+La animación automática de todas las filas se sustituye por una entrada diagonal de 240 ms con rebote para mensajes recibidos nuevos identificados. Respeta Ligero y reducir movimiento. Un observador limitado al panel procesa únicamente nodos añadidos. Historial, duplicados, carga inicial y desplazamientos no disparan efectos. Se animan como máximo tres mensajes por lote y se cancelan al perder el foco. La detección de entrada depende de la fecha que WhatsApp expone; algunos stickers o cambios de formato pueden no producir el efecto. Al reaplicar se liberan observadores, audio, controles y la sustitución del sonido nativo.
+
+Inspiración: [entrevista al equipo de arte y sonido de Persona 5](https://personacentral.com/persona-5-interview-ui-design-sound-music/), sobre respuesta inmediata y coordinación de movimiento/sonido. Adaptación propia, no copia exacta del juego.
+
+Pruebas: `node --test desktop/theme.test.mjs desktop/updater.test.mjs desktop/effects.test.mjs`. `node desktop/dev/verify-effects.mjs PUERTO` verifica eventos y sustitución de audio con un iframe aislado temporal; no envía mensajes reales.

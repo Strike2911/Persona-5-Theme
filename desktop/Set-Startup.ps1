@@ -16,6 +16,7 @@ try {
     $shortcut.Arguments = '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + (Join-Path $PSScriptRoot 'Start-WhatsApp.ps1') + '" -Startup'
     $shortcut.WorkingDirectory = $PSScriptRoot
     $shortcut.Description = 'Abre WhatsApp con Persona 5 al iniciar sesion en Windows'
+    $shortcut.IconLocation = (Join-Path $PSScriptRoot 'assets\persona.ico') + ',0'
     $shortcut.WindowStyle = 7
     $shortcut.Save()
     Write-Output $shortcutPath

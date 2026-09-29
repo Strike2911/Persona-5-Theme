@@ -1,9 +1,10 @@
-# Persona 5 Theme 1.2.3
+# Persona 5 Theme 1.3.0
 
-- Al volver a WhatsApp, se descartan las animaciones de entrada pendientes del tema. Los mensajes nuevos conservan su animación con la ventana activa.
-- Las actualizaciones de estado del contacto ya no reescriben el retrato si la foto no cambió.
-- Las animaciones de cabecera y portada liberan su efecto al terminar.
-- El inicio automático espera 30 segundos y permite más tiempo de carga. Incluye un registro local de errores técnicos, sin conversaciones.
+- Icono propio en el instalador, escritorio y menú Inicio. Busca **WhatsApp Persona 5** para abrir con tema.
+- Dos sonidos: selección/mensaje del chat abierto y sustitución del aviso original de otros chats. Control **♪ P5** con volumen, silencio y prueba.
+- Entrada diagonal con rebote de 240 ms para nuevos mensajes identificados. El historial y los duplicados no disparan efectos. Respeta Ligero y reducir movimiento.
+
+Haz clic dentro de WhatsApp para habilitar audio. Mantén sus sonidos de mensajes activos: el tema sustituye el recurso conocido del aviso sin tocar llamadas ni notas de voz. Una actualización de WhatsApp que cambie ese recurso puede requerir adaptar el tema. Algunos mensajes sin fecha reconocible pueden no disparar el efecto de entrada.
 
 Estos cambios reducen trabajo del tema; no garantizan eliminar bloqueos internos de WhatsApp ni los causados por falta de recursos del equipo.
 

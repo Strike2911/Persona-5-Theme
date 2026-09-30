@@ -60,7 +60,7 @@ class Installer : Form {
    Label("Tu WhatsApp, con estilo Persona 5.",0,44,21,true);
    Label("Instala el tema en unos pasos. No necesitas escribir comandos,\nelegir carpetas ni instalar programas adicionales.",60,64,12,false);
    Label("Antes de empezar",145,32,13,true);
-   Label("• Necesitas Windows de 64 bits.\n• Ten WhatsApp oficial instalado desde Microsoft Store.\n• El instalador crea los accesos en tu escritorio.\n• Tus conversaciones y tu cuenta permanecen en WhatsApp.",186,130,11,false);
+   Label("• Necesitas Windows de 64 bits.\n• Ten WhatsApp oficial instalado desde Microsoft Store.\n• Los accesos se crean en Inicio y, si es posible, en el escritorio.\n• Tus conversaciones y tu cuenta permanecen en WhatsApp.",186,130,11,false);
   } else if(page==1) {
    step.Text="2 / 3   ANTES DE INSTALAR";next.Text="Instalar tema";back.Text="Atrás";next.Enabled=false;
    Label("Una cosa que debes saber",0,40,20,true);
@@ -78,7 +78,7 @@ class Installer : Form {
   } else {
    step.Text="LISTO PARA USAR";next.Text="Abrir WhatsApp";back.Text="Terminar";
    Label("¡Ya está instalado!",0,46,24,true);
-   Label("En tu escritorio encontrarás:",68,32,12,false);
+   Label("Busca estos accesos en el menú Inicio:",68,32,12,false);
    Label("WhatsApp Persona 5\nEl tema completo con animaciones.\n\nWhatsApp Persona 5 - Ligero\nEl mismo diseño sin animaciones.\n\nWhatsApp - Restaurar normal\nAbre WhatsApp sin tema ni depuración.\n\nBuscar actualizaciones: consulta nuevas versiones en GitHub.",109,230,10,false);
   }
  }
@@ -90,7 +90,7 @@ class Installer : Form {
   worker.DoWork+=(s,a)=>Bundle.Run(false,autoStart);
   worker.RunWorkerCompleted+=(s,a)=>{
    busy=false;
-   if(a.Error!=null){page=1;Render();MessageBox.Show("No se completó la instalación. Comprueba que tienes WhatsApp de Microsoft Store instalado.\n\nDetalle:\n"+a.Error.Message,"No se pudo instalar",MessageBoxButtons.OK,MessageBoxIcon.Information);}
+   if(a.Error!=null){page=1;Render();MessageBox.Show("No se completó la instalación. El detalle siguiente indica qué paso falló.\n\nDetalle:\n"+a.Error.Message,"No se pudo instalar",MessageBoxButtons.OK,MessageBoxIcon.Information);}
    else {page=3;Render();}
    worker.Dispose();
   };worker.RunWorkerAsync();

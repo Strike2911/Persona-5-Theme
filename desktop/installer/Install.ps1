@@ -16,7 +16,7 @@ try {
     $message = @"
 Instalar el tema Persona 5 para WhatsApp oficial.
 
-Se guardara en tu carpeta local de programas y creara tres accesos directos. Incluye Node.js; no necesitas instalarlo aparte. No incluye ni copia conversaciones o sesiones.
+Se guardara en tu carpeta local de programas y creara accesos en el menu Inicio y, si esta disponible, en el escritorio. Incluye Node.js; no necesitas instalarlo aparte. No incluye ni copia conversaciones o sesiones.
 
 El acceso del tema reinicia WhatsApp y habilita depuracion SOLO en este equipo. Otros programas locales podrian acceder al contenido mientras esa sesion siga abierta. Cerrar la ventana puede dejar WhatsApp en la bandeja. Usa 'WhatsApp - Restaurar normal' para cerrar esa sesion y desactivar la depuracion.
 
@@ -26,15 +26,33 @@ Deseas instalarlo?
 "@
     if (!$Silent -and [System.Windows.Forms.MessageBox]::Show($message,'WhatsApp Persona 5 - Instalador','YesNo','Information') -ne 'Yes') { exit 0 }
     $destination = Join-Path $env:LOCALAPPDATA 'Programs\WhatsAppPersona5'
+    # Cerrar unicamente los componentes de la instalacion que se actualiza.
+    $installedHelpers = @((Join-Path $destination 'desktop\NotificationPopup.exe'), (Join-Path $destination 'desktop\runtime\node.exe'))
+    Get-CimInstance Win32_Process | Where-Object { $_.ExecutablePath -and $_.ExecutablePath -in $installedHelpers } | ForEach-Object {
+        $running = Get-Process -Id $_.ProcessId -ErrorAction SilentlyContinue
+        if ($running -and $running.Path -in $installedHelpers) {
+            Stop-Process -Id $running.Id -ErrorAction Stop
+            $running.WaitForExit(5000) | Out-Null
+        }
+    }
     foreach ($entry in $manifest) {
         $target = Join-Path $destination $entry.path
         New-Item -ItemType Directory -Path (Split-Path $target) -Force | Out-Null
-        Copy-Item -LiteralPath (Join-Path $payload $entry.path) -Destination $target -Force
+        # Windows puede tardar brevemente en liberar un ejecutable cerrado.
+        for ($attempt = 0; $attempt -lt 10; $attempt++) {
+            try {
+                Copy-Item -LiteralPath (Join-Path $payload $entry.path) -Destination $target -Force
+                break
+            } catch [IO.IOException] {
+                if ($attempt -eq 9) { throw }
+                Start-Sleep -Milliseconds 300
+            }
+        }
     }
     & (Join-Path $destination 'desktop\Install-Shortcuts.ps1') | Out-Null
     if ($StartupMode -eq 'Enable') { & (Join-Path $destination 'desktop\Set-Startup.ps1') | Out-Null }
     if ($StartupMode -eq 'Disable') { & (Join-Path $destination 'desktop\Set-Startup.ps1') -Disable | Out-Null }
-    if (!$Silent) { [System.Windows.Forms.MessageBox]::Show('Instalado. Abre WhatsApp Persona 5 desde el escritorio. El modo Ligero desactiva animaciones. Para volver a WhatsApp sin depuracion, usa Restaurar normal.','Instalacion completa','OK','Information') | Out-Null }
+    if (!$Silent) { [System.Windows.Forms.MessageBox]::Show('Instalado. Abre WhatsApp Persona 5 desde el menu Inicio o el escritorio. El modo Ligero desactiva animaciones. Para volver a WhatsApp sin depuracion, usa Restaurar normal.','Instalacion completa','OK','Information') | Out-Null }
 } catch {
     if ($CheckOnly -or $Silent) { Write-Error $_; exit 1 }
     Add-Type -AssemblyName System.Windows.Forms

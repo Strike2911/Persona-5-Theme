@@ -1,17 +1,12 @@
-# Persona 5 Theme 1.3.2
+# Persona 5 Theme 1.3.3
 
-- Avisos flotantes Persona 5 abajo a la derecha, en la pantalla de WhatsApp, con el sonido proporcionado para otros chats.
-- Botón **No mostrar**, y opciones en **♪ P5** para ocultar avisos, reactivarlos o volver al estilo original de WhatsApp.
-- Ocultar avisos antes de configurar los sonidos conserva el volumen predeterminado al reabrir.
-- Se conserva el centro de notificaciones de Windows. El aviso flotante abre WhatsApp; no incluye respuesta rápida.
-- «TAKE YOUR HEART» tiene las letras más separadas y ya no lleva punto.
+- Corregida la instalación y actualización cuando el escritorio no existe, está redirigido o no permite guardar accesos directos. Los accesos se crean de forma independiente en el menú Inicio; un fallo del escritorio ya no cancela la instalación.
+- La actualización cierra los componentes del tema de la instalación de destino antes de reemplazarlos, evitando archivos en uso.
+- Notificaciones rediseñadas: franja roja lateral, texto más legible, botones separados y cierre visible. Se pausa el cierre automático al pasar el cursor por el aviso.
+- Mensajes del instalador más claros, sin atribuir todos los errores a la ausencia de WhatsApp.
 
-Mantén activos los avisos de WhatsApp para que se generen los eventos. Un componente local permanece abierto mientras WhatsApp usa el tema. No solicita acceso a notificaciones de otras aplicaciones, no guarda mensajes y no añade puertos. Si no puede mostrar el aviso propio, conserva el original. Depende de funciones internas de WhatsApp que pueden cambiar con actualizaciones. Los sonidos dentro del chat pueden requerir un primer clic.
+**Para actualizar:** descarga WhatsApp-Persona5-Instalar.exe y ejecútalo. No necesitas desinstalar la versión anterior. Si no aparecen accesos en el escritorio, busca WhatsApp Persona 5 en el menú Inicio.
 
-Estos cambios reducen trabajo del tema; no garantizan eliminar bloqueos internos de WhatsApp ni los causados por falta de recursos del equipo.
+Las versiones con el actualizador integrado mostrarán el aviso al abrir el tema cuando corresponda su próxima comprobación (como máximo una consulta cada 24 horas). También puedes usar WhatsApp Persona 5 - Buscar actualizaciones para comprobarlo ahora. La instalación requiere tu confirmación; no es una actualización forzada.
 
-Descarga **WhatsApp-Persona5-Instalar.exe** y sigue los pasos. No necesitas desinstalar la versión anterior.
-
-La opción configura el inicio de sesión de Windows. Para abrir manualmente WhatsApp con el diseño, usa **WhatsApp Persona 5**. El icono oficial y «Restaurar normal» siguen permitiendo iniciar una sesión sin tema. Puede verse la interfaz original brevemente mientras carga el tema.
-
-Requiere Windows x64 y WhatsApp oficial de Microsoft Store. Instalador no firmado digitalmente.
+Requiere Windows x64 y WhatsApp oficial de Microsoft Store. Proyecto no oficial; instalador no firmado digitalmente. Esta versión no atribuye ni promete corregir el fallo intermitente de WhatsApp que aún se está investigando.

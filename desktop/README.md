@@ -104,3 +104,13 @@ La animación automática de todas las filas se sustituye por una entrada diagon
 Inspiración: [entrevista al equipo de arte y sonido de Persona 5](https://personacentral.com/persona-5-interview-ui-design-sound-music/), sobre respuesta inmediata y coordinación de movimiento/sonido. Adaptación propia, no copia exacta del juego.
 
 Pruebas: `node --test desktop/theme.test.mjs desktop/updater.test.mjs desktop/effects.test.mjs`. `node desktop/dev/verify-effects.mjs PUERTO` verifica eventos y sustitución de audio con un iframe aislado temporal; no envía mensajes reales.
+
+### Avisos de escritorio opcionales (1.3.1)
+
+`notifications-host.mjs` y `NotificationPopup.exe` acompañan la sesión del tema y terminan al cerrar la conexión de WhatsApp. Usan la conexión de depuración local ya autorizada, sin un nuevo servidor ni acceso a las notificaciones de otras apps. Solo transfieren al proceso local el título y cuerpo ya preparados por WhatsApp para su aviso, con límites de longitud; no los escriben en disco. No se leen mensajes del historial.
+
+El adaptador versionado intercepta `WAWebWindowsNotificationHelpers.showMessageNotification` y `playTone`. Se conserva la lógica previa de WhatsApp (incluidos avisos suprimidos); cuando el componente confirma haber mostrado la tarjeta, se conserva el aviso original en el centro de notificaciones con su ventana emergente suprimida. Si el componente falla o no confirma en 1,5 segundos, se usa el aviso original. No se modifica la configuración global de Windows. Estas funciones internas no son una API pública y pueden necesitar cambios tras actualizar WhatsApp.
+
+La tarjeta aparece abajo a la derecha en la pantalla de WhatsApp, sin tomar foco, y desaparece a los 6,5 segundos. Incluye abrir WhatsApp, cerrar y **No mostrar**. Este último oculta futuras ventanas, pero conserva el centro de notificaciones. **♪ P5 → Mostrar avisos en escritorio** las reactiva; **Usar estilo Persona 5** permite elegir la apariencia del tema o la original. El sonido se controla por separado. No se implementa envío de respuestas desde la tarjeta.
+
+Para compilar el componente local: `desktop/Build-NotificationPopup.ps1`; el instalador lo compila y empaqueta automáticamente. Pruebas del adaptador: `node --test desktop/native-notifications.test.mjs`.

@@ -55,6 +55,11 @@ try {
             throw 'La conexion de depuracion no esta limitada al equipo.'
         }
         Write-LaunchLog 'Theme verified; debug listener limited to loopback.'
+        $popup = Join-Path $PSScriptRoot 'NotificationPopup.exe'
+        if(Test-Path -LiteralPath $popup) {
+            try { Start-Process -FilePath $node -WindowStyle Hidden -ArgumentList ('"' + (Join-Path $PSScriptRoot 'notifications-host.mjs') + '" ' + $port) }
+            catch { Write-LaunchLog 'Optional notification helper could not start; native notices remain available.' }
+        }
         # A separate, short-lived check never delays opening WhatsApp.
         try {
             $updateScript = Join-Path $PSScriptRoot 'Update-WhatsApp.ps1'

@@ -13,8 +13,10 @@ export async function connect(port) {
   });
   let id = 0;
   const pending = new Map();
+  const listeners = new Map();
   socket.addEventListener('message', event => {
     const data = JSON.parse(event.data);
+    if(data.method) for(const listener of listeners.get(data.method)||[]) { try{listener(data.params);}catch{} }
     const call = pending.get(data.id);
     if (!call) return;
     pending.delete(data.id);
@@ -22,10 +24,12 @@ export async function connect(port) {
     if (data.error) call.reject(Error(data.error.message)); else call.resolve(data.result);
   });
   socket.addEventListener('close', () => {
+    for(const listener of listeners.get('P5.connectionClosed')||[]) {try{listener();}catch{}}
     for (const call of pending.values()) { clearTimeout(call.timeout); call.reject(Error('WhatsApp se cerro')); }
     pending.clear();
   });
   return {
+    on(method,listener){if(!listeners.has(method))listeners.set(method,new Set());listeners.get(method).add(listener);return()=>listeners.get(method)?.delete(listener);},
     close: () => socket.close(),
     send(method, params = {}) {
       return new Promise((resolve, reject) => {

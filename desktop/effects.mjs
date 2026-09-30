@@ -19,9 +19,9 @@ export function installEffects(config, createTracker) {
   if (!document.body) return {bind(){}, cleanup(){}};
   const tracker = createTracker();
   const key = 'p5-effects-v1';
-  let prefs = {sound:true, clicks:true, volume:0.35};
+  let prefs = {sound:true, clicks:true, volume:0.35, banners:true, personaNotices:true};
   try { const saved=JSON.parse(localStorage.getItem(key));
-    if (saved) prefs={sound:saved.sound!==false, clicks:saved.clicks!==false, volume:Math.max(0,Math.min(1,Number(saved.volume)||0))};
+    if (saved) prefs={sound:saved.sound!==false, clicks:saved.clicks!==false, banners:saved.banners!==false,personaNotices:saved.personaNotices!==false,volume:Math.max(0,Math.min(1,Number(saved.volume)||0))};
   } catch {}
   const audio = Object.fromEntries(Object.entries(config).map(([name,src]) => {
     const a=new Audio(src); a.preload='auto'; return [name,a];
@@ -107,14 +107,17 @@ export function installEffects(config, createTracker) {
   function stopMotion(){for(const a of motion)a.cancel();motion.clear();}
   // Small local controls; preferences contain no chat data.
   const controls=document.createElement('details'); controls.id='p5-sound-controls';
-  controls.innerHTML='<summary title="Sonidos Persona 5">♪ P5</summary><div><strong>SONIDOS PERSONA 5</strong><label><input type="checkbox" data-option="sound"> Activar sonidos</label><label><input type="checkbox" data-option="clicks"> Clic al cambiar de chat</label><label>Volumen <input type="range" min="0" max="100" aria-label="Volumen Persona 5"></label><button type="button">Probar sonido</button><small>Haz clic en WhatsApp para habilitar audio. Mantén activos sus avisos de mensajes para oír el sonido de otros chats.</small></div>';
-  for(const name of ['sound','clicks']){const input=controls.querySelector('[data-option="'+name+'"]');input.checked=prefs[name];input.onchange=()=>{prefs[name]=input.checked;save();};}
+  controls.innerHTML='<summary title="Opciones Persona 5">♪ P5</summary><div><strong>OPCIONES PERSONA 5</strong><label><input type="checkbox" data-option="banners"> Mostrar avisos en escritorio</label><label><input type="checkbox" data-option="personaNotices"> Usar estilo Persona 5</label><label><input type="checkbox" data-option="sound"> Activar sonidos</label><label><input type="checkbox" data-option="clicks"> Clic al cambiar de chat</label><label>Volumen <input type="range" min="0" max="100" aria-label="Volumen Persona 5"></label><button type="button">Probar sonido</button><small>Sin estilo Persona 5 se usan los avisos normales de WhatsApp. Ocultar avisos conserva los mensajes en el centro de notificaciones.</small></div>';
+  for(const name of ['sound','clicks','banners','personaNotices']){const input=controls.querySelector('[data-option="'+name+'"]');input.checked=prefs[name];input.onchange=()=>{prefs[name]=input.checked;save();};}
+  function reloadPrefs(){try{const saved=JSON.parse(localStorage.getItem(key));if(saved){prefs={...prefs,...saved};for(const name of ['sound','clicks','banners','personaNotices'])controls.querySelector('[data-option="'+name+'"]').checked=prefs[name]!==false;}}catch{}}
+  window.addEventListener('p5-preferences',reloadPrefs);
   const volume=controls.querySelector('[type="range"]');volume.value=prefs.volume*100;volume.oninput=()=>{prefs.volume=Number(volume.value)/100;save();};
   controls.querySelector('button').onclick=()=>play('chat');document.body.appendChild(controls);
   document.addEventListener('click',click,true);document.addEventListener('scroll',scroll,true);
   window.addEventListener('blur',stopMotion);document.addEventListener('visibilitychange',stopMotion);
   bind();
   return {bind,cleanup(){disposed=true;messageObserver.disconnect();stopMotion();
+    window.removeEventListener('p5-preferences',reloadPrefs);
     if(media.play===themedPlay)media.play=originalPlay;
     for(const [timer,resolve]of pendingSounds){clearTimeout(timer);resolve();}pendingSounds.clear();
     document.removeEventListener('click',click,true);document.removeEventListener('scroll',scroll,true);

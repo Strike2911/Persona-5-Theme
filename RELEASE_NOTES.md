@@ -1,10 +1,11 @@
-# Persona 5 Theme 1.3.0
+# Persona 5 Theme 1.3.1
 
-- Icono propio en el instalador, escritorio y menú Inicio. Busca **WhatsApp Persona 5** para abrir con tema.
-- Dos sonidos: selección/mensaje del chat abierto y sustitución del aviso original de otros chats. Control **♪ P5** con volumen, silencio y prueba.
-- Entrada diagonal con rebote de 240 ms para nuevos mensajes identificados. El historial y los duplicados no disparan efectos. Respeta Ligero y reducir movimiento.
+- Avisos flotantes Persona 5 abajo a la derecha, en la pantalla de WhatsApp, con el sonido proporcionado para otros chats.
+- Botón **No mostrar**, y opciones en **♪ P5** para ocultar avisos, reactivarlos o volver al estilo original de WhatsApp.
+- Se conserva el centro de notificaciones de Windows. El aviso flotante abre WhatsApp; no incluye respuesta rápida.
+- «TAKE YOUR HEART» tiene las letras más separadas y ya no lleva punto.
 
-Haz clic dentro de WhatsApp para habilitar audio. Mantén sus sonidos de mensajes activos: el tema sustituye el recurso conocido del aviso sin tocar llamadas ni notas de voz. Una actualización de WhatsApp que cambie ese recurso puede requerir adaptar el tema. Algunos mensajes sin fecha reconocible pueden no disparar el efecto de entrada.
+Mantén activos los avisos de WhatsApp para que se generen los eventos. Un componente local permanece abierto mientras WhatsApp usa el tema. No solicita acceso a notificaciones de otras aplicaciones, no guarda mensajes y no añade puertos. Si no puede mostrar el aviso propio, conserva el original. Depende de funciones internas de WhatsApp que pueden cambiar con actualizaciones. Los sonidos dentro del chat pueden requerir un primer clic.
 
 Estos cambios reducen trabajo del tema; no garantizan eliminar bloqueos internos de WhatsApp ni los causados por falta de recursos del equipo.
 

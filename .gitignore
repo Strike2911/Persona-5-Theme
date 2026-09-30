@@ -1,6 +1,7 @@
 dist/
 node_modules/
 desktop/runtime/
+desktop/NotificationPopup.exe
 *.log
 *.lnk
 .env

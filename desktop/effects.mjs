@@ -21,7 +21,7 @@ export function installEffects(config, createTracker) {
   const key = 'p5-effects-v1';
   let prefs = {sound:true, clicks:true, volume:0.35, banners:true, personaNotices:true};
   try { const saved=JSON.parse(localStorage.getItem(key));
-    if (saved) prefs={sound:saved.sound!==false, clicks:saved.clicks!==false, banners:saved.banners!==false,personaNotices:saved.personaNotices!==false,volume:Math.max(0,Math.min(1,Number(saved.volume)||0))};
+    if (saved) prefs={sound:saved.sound!==false, clicks:saved.clicks!==false, banners:saved.banners!==false,personaNotices:saved.personaNotices!==false,volume:Number.isFinite(saved.volume)?Math.max(0,Math.min(1,saved.volume)):.35};
   } catch {}
   const audio = Object.fromEntries(Object.entries(config).map(([name,src]) => {
     const a=new Audio(src); a.preload='auto'; return [name,a];

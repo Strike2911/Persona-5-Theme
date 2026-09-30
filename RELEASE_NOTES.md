@@ -1,7 +1,8 @@
-# Persona 5 Theme 1.3.1
+# Persona 5 Theme 1.3.2
 
 - Avisos flotantes Persona 5 abajo a la derecha, en la pantalla de WhatsApp, con el sonido proporcionado para otros chats.
 - Botón **No mostrar**, y opciones en **♪ P5** para ocultar avisos, reactivarlos o volver al estilo original de WhatsApp.
+- Ocultar avisos antes de configurar los sonidos conserva el volumen predeterminado al reabrir.
 - Se conserva el centro de notificaciones de Windows. El aviso flotante abre WhatsApp; no incluye respuesta rápida.
 - «TAKE YOUR HEART» tiene las letras más separadas y ya no lleva punto.
 

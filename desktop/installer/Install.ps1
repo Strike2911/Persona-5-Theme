@@ -1,5 +1,7 @@
 param([switch]$CheckOnly, [switch]$Silent, [ValidateSet('Keep','Enable','Disable')][string]$StartupMode='Keep')
 $ErrorActionPreference = 'Stop'
+$installStage = 'Verificar paquete'
+$filesCopied = $false
 try {
     $payload = Join-Path $PSScriptRoot 'payload'
     $manifest = Get-Content (Join-Path $PSScriptRoot 'files.json') -Raw | ConvertFrom-Json
@@ -49,12 +51,49 @@ Deseas instalarlo?
             }
         }
     }
-    & (Join-Path $destination 'desktop\Install-Shortcuts.ps1') | Out-Null
-    if ($StartupMode -eq 'Enable') { & (Join-Path $destination 'desktop\Set-Startup.ps1') | Out-Null }
-    if ($StartupMode -eq 'Disable') { & (Join-Path $destination 'desktop\Set-Startup.ps1') -Disable | Out-Null }
+    $filesCopied = $true
+    $pending = New-Object 'System.Collections.Generic.List[string]'
+    $shortcutsFailed = $false
+    $installStage = 'Crear accesos directos'
+    try {
+        & (Join-Path $destination 'desktop\Install-Shortcuts.ps1') 3>&1 | ForEach-Object {
+            if ($_ -is [System.Management.Automation.WarningRecord]) { $pending.Add($_.Message) }
+        }
+    } catch {
+        $shortcutsFailed = $true
+        $pending.Add(('Accesos directos: ' + $_.Exception.Message + ' HRESULT: ' + $_.Exception.HResult))
+    }
+    $installStage = 'Configurar inicio automatico'
+    if ($shortcutsFailed -and $StartupMode -eq 'Enable') {
+        $pending.Add('No se intento activar el inicio automatico porque fallo la creacion de accesos. No se cambiaron las protecciones.')
+    } else {
+        try {
+            if ($StartupMode -eq 'Enable') { & (Join-Path $destination 'desktop\Set-Startup.ps1') | Out-Null }
+            if ($StartupMode -eq 'Disable') { & (Join-Path $destination 'desktop\Set-Startup.ps1') -Disable | Out-Null }
+        } catch { $pending.Add(('Inicio automatico: ' + $_.Exception.Message + ' HRESULT: ' + $_.Exception.HResult)) }
+    }
+    if ($pending.Count -gt 0) {
+        $detail = 'Los archivos del tema se copiaron. Quedo pendiente:' + [Environment]::NewLine + ($pending -join [Environment]::NewLine)
+        [Console]::Error.WriteLine($detail)
+        if (!$Silent) { [System.Windows.Forms.MessageBox]::Show($detail,'Instalacion con pendientes','OK','Warning') | Out-Null }
+        exit 2
+    }
     if (!$Silent) { [System.Windows.Forms.MessageBox]::Show('Instalado. Abre WhatsApp Persona 5 desde el menu Inicio o el escritorio. El modo Ligero desactiva animaciones. Para volver a WhatsApp sin depuracion, usa Restaurar normal.','Instalacion completa','OK','Information') | Out-Null }
 } catch {
-    if ($CheckOnly -or $Silent) { Write-Error $_; exit 1 }
+    $failure = $_
+    $report = @(
+        ('Fecha local: ' + (Get-Date -Format o)),
+        ('Paso: ' + $installStage),
+        ('Archivos copiados: ' + $filesCopied),
+        ('Tipo: ' + $failure.Exception.GetType().FullName),
+        ('HRESULT: 0x{0:X8}' -f $failure.Exception.HResult),
+        ('Mensaje: ' + $failure.Exception.Message),
+        ('Detalle: ' + $failure.Exception.ToString()),
+        ('Origen: ' + $failure.InvocationInfo.PositionMessage),
+        ('Pila: ' + $failure.ScriptStackTrace)
+    ) -join [Environment]::NewLine
+    if ($filesCopied) { $report += [Environment]::NewLine + 'Los archivos se copiaron, pero la configuracion no termino. No se abrira el tema automaticamente.' }
+    if ($CheckOnly -or $Silent) { [Console]::Error.WriteLine($report); exit 1 }
     Add-Type -AssemblyName System.Windows.Forms
     [System.Windows.Forms.MessageBox]::Show($_.Exception.Message,'No se pudo instalar','OK','Error') | Out-Null
     exit 1

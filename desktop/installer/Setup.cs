@@ -9,7 +9,9 @@ using System.Windows.Forms;
 
 static class Bundle {
  public static string Destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Programs\WhatsAppPersona5\desktop");
+ public static string PendingReport = "";
  public static void Run(bool verify, bool autoStart = true) {
+  PendingReport="";
   string temp = Path.Combine(Path.GetTempPath(), "WhatsAppPersona5-" + Guid.NewGuid().ToString("N"));
   Directory.CreateDirectory(temp);
   try {
@@ -23,7 +25,14 @@ static class Bundle {
    using(var p=Process.Start(psi)) {
     var stdout=p.StandardOutput.ReadToEndAsync(); var stderr=p.StandardError.ReadToEndAsync();
     p.WaitForExit(); System.Threading.Tasks.Task.WaitAll(stdout,stderr);
-    if(p.ExitCode!=0)throw new Exception(stderr.Result.Length>0?stderr.Result:stdout.Result);
+    if(p.ExitCode!=0) {
+     string detail=stderr.Result.Length>0?stderr.Result:stdout.Result;
+     string reportPath=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "WhatsAppPersona5", "install-error.log");
+     string saved="";
+     try { Directory.CreateDirectory(Path.GetDirectoryName(reportPath)); File.WriteAllText(reportPath, "Fecha: "+DateTimeOffset.Now.ToString("o")+Environment.NewLine+"Salida: "+p.ExitCode+Environment.NewLine+detail+Environment.NewLine+stdout.Result); saved="\n\nInforme guardado en:\n"+reportPath; } catch { }
+     if(p.ExitCode==2 && !verify) { PendingReport=detail+saved; return; }
+     throw new Exception(detail+saved);
+    }
    }
   } finally { try { if(temp.StartsWith(Path.Combine(Path.GetTempPath(),"WhatsAppPersona5-"),StringComparison.OrdinalIgnoreCase))Directory.Delete(temp,true); } catch {} }
  }
@@ -75,6 +84,10 @@ class Installer : Form {
    Label("Estamos preparando todo",0,44,21,true);
    Label("Verificando archivos, copiando el tema y creando los accesos.\nEspera un momento; esta ventana terminará automáticamente.",66,70,12,false);
    progress=new ProgressBar {Location=new Point(0,167),Size=new Size(672,20),Style=ProgressBarStyle.Marquee};content.Controls.Add(progress);
+  } else if(page==4) {
+   step.Text="ARCHIVOS COPIADOS · CONFIGURACIÓN PENDIENTE";next.Text="Terminar";back.Visible=false;
+   Label("La configuración quedó incompleta",0,46,21,true);
+   var report=new TextBox {Multiline=true,ReadOnly=true,ScrollBars=ScrollBars.Vertical,Text=Bundle.PendingReport,Location=new Point(0,60),Size=new Size(675,260),BackColor=BackColor,ForeColor=ForeColor};content.Controls.Add(report);
   } else {
    step.Text="LISTO PARA USAR";next.Text="Abrir WhatsApp";back.Text="Terminar";
    Label("¡Ya está instalado!",0,46,24,true);
@@ -83,6 +96,7 @@ class Installer : Form {
   }
  }
  void Next(object sender,EventArgs e) {
+  if(page==4) {Close();return;}
   if(page==0) {page=1;Render();return;}
   if(page==3) {try {Bundle.Launch();Close();}catch(Exception error){MessageBox.Show(error.Message,"No se pudo abrir WhatsApp");}return;}
   if(page!=1||!consent.Checked)return;
@@ -91,7 +105,7 @@ class Installer : Form {
   worker.RunWorkerCompleted+=(s,a)=>{
    busy=false;
    if(a.Error!=null){page=1;Render();MessageBox.Show("No se completó la instalación. El detalle siguiente indica qué paso falló.\n\nDetalle:\n"+a.Error.Message,"No se pudo instalar",MessageBoxButtons.OK,MessageBoxIcon.Information);}
-   else {page=3;Render();}
+   else {page=String.IsNullOrEmpty(Bundle.PendingReport)?3:4;Render();}
    worker.Dispose();
   };worker.RunWorkerAsync();
  }

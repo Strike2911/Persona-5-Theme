@@ -1,12 +1,14 @@
-param([switch]$Disable)
+param([switch]$Disable, [string]$StartupFolder = [Environment]::GetFolderPath('Startup'))
 $ErrorActionPreference = 'Stop'
-$startupFolder = [Environment]::GetFolderPath('Startup')
-if (!$startupFolder) { throw 'No se encontro la carpeta Inicio de este usuario.' }
+if (!$startupFolder) {
+    if ($Disable) { Write-Output 'Windows no proporciona carpeta de inicio automatico; no se realizaron cambios.'; return }
+    throw 'Windows no proporciona la carpeta de inicio automatico. El tema no se configurara para arrancar con Windows.'
+}
 $shortcutPath = Join-Path $startupFolder 'WhatsApp Persona 5.lnk'
 if ($Disable) {
     if (Test-Path -LiteralPath $shortcutPath) { Remove-Item -LiteralPath $shortcutPath }
     Write-Output 'Inicio automatico de Persona 5 desactivado.'
-    exit
+    return
 }
 New-Item -ItemType Directory -Path $startupFolder -Force | Out-Null
 $shell = New-Object -ComObject WScript.Shell

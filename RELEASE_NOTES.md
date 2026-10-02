@@ -1,12 +1,11 @@
-# Persona 5 Theme 1.3.3
+# Persona 5 Theme 1.3.4
 
-- Corregida la instalación y actualización cuando el escritorio no existe, está redirigido o no permite guardar accesos directos. Los accesos se crean de forma independiente en el menú Inicio; un fallo del escritorio ya no cancela la instalación.
-- La actualización cierra los componentes del tema de la instalación de destino antes de reemplazarlos, evitando archivos en uso.
-- Notificaciones rediseñadas: franja roja lateral, texto más legible, botones separados y cierre visible. Se pausa el cierre automático al pasar el cursor por el aviso.
-- Mensajes del instalador más claros, sin atribuir todos los errores a la ausencia de WhatsApp.
+- Una carpeta de inicio automatico no disponible ya no se presenta como un fallo total de instalacion. Se informa como configuracion pendiente.
+- Desactivar el inicio automatico no falla cuando Windows no proporciona esa carpeta.
+- Si no se pueden crear accesos, se informa que los archivos se copiaron y se muestra el detalle en una pantalla desplazable. No se intenta activar el inicio automatico ni abrir el tema como alternativa a un acceso rechazado.
+- Los avisos sobre el escritorio tambien aparecen al finalizar, en vez de perderse en la salida del instalador.
+- Los errores y pendientes se guardan en %LOCALAPPDATA%\WhatsAppPersona5\install-error.log.
 
-**Para actualizar:** descarga WhatsApp-Persona5-Instalar.exe y ejecútalo. No necesitas desinstalar la versión anterior. Si no aparecen accesos en el escritorio, busca WhatsApp Persona 5 en el menú Inicio.
+Esta version corrige el manejo de errores; no elimina bloqueos de antivirus ni garantiza resolver un rechazo de acceso de Windows. Si aparece una deteccion, conserva su detalle para investigarla.
 
-Las versiones con el actualizador integrado mostrarán el aviso al abrir el tema cuando corresponda su próxima comprobación (como máximo una consulta cada 24 horas). También puedes usar WhatsApp Persona 5 - Buscar actualizaciones para comprobarlo ahora. La instalación requiere tu confirmación; no es una actualización forzada.
-
-Requiere Windows x64 y WhatsApp oficial de Microsoft Store. Proyecto no oficial; instalador no firmado digitalmente. Esta versión no atribuye ni promete corregir el fallo intermitente de WhatsApp que aún se está investigando.
+Descarga WhatsApp-Persona5-Instalar.exe. Las instalaciones con actualizador pueden detectarla al abrir el tema en su proxima consulta diaria o desde Buscar actualizaciones.

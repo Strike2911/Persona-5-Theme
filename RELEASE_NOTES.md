@@ -1,5 +1,9 @@
-## 1.3.5
+## 1.3.6
 
-- Tres accesos: WhatsApp Persona 5, Buscar actualizaciones y Desinstalar.
-- El desinstalador desactiva el inicio automatico, restaura WhatsApp sin tema y elimina los accesos y archivos del programa. Conserva WhatsApp, sus conversaciones y los registros de diagnostico.
-- Al actualizar se retiran los accesos antiguos Ligero y Restaurar normal que apuntan a esta instalacion.
+- Actualizaciones directas: descarga e instala la ultima version desde GitHub sin abrir el navegador.
+- Comprobacion diaria al abrir el tema y comprobacion inmediata desde Buscar actualizaciones.
+- Verifica origen, tamano y SHA256 antes de ejecutar el instalador. Los bloqueos de Windows se respetan y los errores quedan registrados.
+- Conserva la preferencia de inicio automatico. Si WhatsApp esta abierto, se reinicia tras actualizar para cargar los cambios.
+- El desinstalador admite retirar la integracion de una copia de desarrollo sin borrar el proyecto.
+
+Las versiones anteriores necesitan instalar esta version una vez para disponer del nuevo actualizador.

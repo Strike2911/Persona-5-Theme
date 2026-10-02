@@ -114,3 +114,9 @@ El adaptador versionado intercepta `WAWebWindowsNotificationHelpers.showMessageN
 La tarjeta aparece abajo a la derecha en la pantalla de WhatsApp, sin tomar foco, y desaparece a los 6,5 segundos. Incluye abrir WhatsApp, cerrar y **No mostrar**. Este último oculta futuras ventanas, pero conserva el centro de notificaciones. **♪ P5 → Mostrar avisos en escritorio** las reactiva; **Usar estilo Persona 5** permite elegir la apariencia del tema o la original. El sonido se controla por separado. No se implementa envío de respuestas desde la tarjeta.
 
 Para compilar el componente local: `desktop/Build-NotificationPopup.ps1`; el instalador lo compila y empaqueta automáticamente. Pruebas del adaptador: `node --test desktop/native-notifications.test.mjs`.
+
+## Actualizaciones del instalador (1.3.6)
+
+La instalacion comprueba GitHub una vez al dia cuando se abre el tema. Buscar actualizaciones fuerza la consulta. Una version nueva se descarga y se instala directamente; se comprueban origen, tamano y SHA256. Se conserva el inicio automatico y, si WhatsApp esta abierto, se reinicia al terminar. Windows puede bloquear el instalador: el actualizador no modifica las protecciones y registra el error en `%LOCALAPPDATA%\WhatsAppPersona5\update-error.log`.
+
+Las copias de desarrollo no se sobrescriben con publicaciones. Para usar este flujo, utiliza los accesos de la instalacion en `%LOCALAPPDATA%\Programs\WhatsAppPersona5`.

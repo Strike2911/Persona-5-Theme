@@ -10,7 +10,7 @@ using System.Windows.Forms;
 static class Bundle {
  public static string Destination = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Programs\WhatsAppPersona5\desktop");
  public static string PendingReport = "";
- public static void Run(bool verify, bool autoStart = true) {
+ public static void Run(bool verify, bool autoStart = true, bool update = false) {
   PendingReport="";
   string temp = Path.Combine(Path.GetTempPath(), "WhatsAppPersona5-" + Guid.NewGuid().ToString("N"));
   Directory.CreateDirectory(temp);
@@ -20,7 +20,7 @@ static class Bundle {
    using(var output=File.Create(zip)) { if(source==null)throw new Exception("El instalador está incompleto. Descárgalo de nuevo."); source.CopyTo(output); }
    string unpack=Path.Combine(temp,"unpack");
    ZipFile.ExtractToDirectory(zip,unpack);
-   var psi = new ProcessStartInfo(PowerShell(), "-NoProfile -ExecutionPolicy Bypass -File \""+Path.Combine(unpack,"Install.ps1")+"\" "+(verify?"-CheckOnly":"-Silent -StartupMode "+(autoStart?"Enable":"Disable")));
+   var psi = new ProcessStartInfo(PowerShell(), "-NoProfile -ExecutionPolicy Bypass -File \""+Path.Combine(unpack,"Install.ps1")+"\" "+(verify?"-CheckOnly":"-Silent -StartupMode "+(update?"Keep":(autoStart?"Enable":"Disable"))));
    psi.EnvironmentVariables["PSModulePath"]=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System),@"WindowsPowerShell\v1.0\Modules"); psi.UseShellExecute=false; psi.CreateNoWindow=true; psi.RedirectStandardError=true; psi.RedirectStandardOutput=true;
    using(var p=Process.Start(psi)) {
     var stdout=p.StandardOutput.ReadToEndAsync(); var stderr=p.StandardError.ReadToEndAsync();
@@ -74,7 +74,7 @@ class Installer : Form {
    step.Text="2 / 3   ANTES DE INSTALAR";next.Text="Instalar tema";back.Text="Atrás";next.Enabled=false;
    Label("Una cosa que debes saber",0,40,20,true);
    Label("El tema abre WhatsApp con una conexión de depuración local.\nPermite cambiar su aspecto, pero otros programas de tu PC\npodrían acceder a esa ventana mientras esté abierta.",55,85,12,false);
-   Label("Para quitar el tema, usa «WhatsApp Persona 5 - Desinstalar».\nCerrar solo la ventana puede dejar WhatsApp en la bandeja.\nSe consulta GitHub al abrir el tema para avisar de actualizaciones.",151,80,11,false);
+   Label("Para quitar el tema, usa «WhatsApp Persona 5 - Desinstalar».\nCerrar solo la ventana puede dejar WhatsApp en la bandeja.\nEl tema descarga e instala actualizaciones al abrirlo.",151,80,11,false);
    consent=new CheckBox {Text="Entiendo y quiero instalar el tema en este equipo.",Location=new Point(0,235),Size=new Size(675,30),ForeColor=Color.White};
    consent.CheckedChanged+=(s,e)=>next.Enabled=consent.Checked;content.Controls.Add(consent);
    startupChoice=new CheckBox {Text="Abrir WhatsApp con Persona 5 al iniciar Windows",Checked=autoStart,Location=new Point(0,272),Size=new Size(675,30),ForeColor=Color.White}; startupChoice.CheckedChanged+=(s,e)=>autoStart=startupChoice.Checked;content.Controls.Add(startupChoice);
@@ -92,7 +92,7 @@ class Installer : Form {
    step.Text="LISTO PARA USAR";next.Text="Abrir WhatsApp";back.Text="Terminar";
    Label("¡Ya está instalado!",0,46,24,true);
    Label("Busca estos accesos en el menú Inicio:",68,32,12,false);
-   Label("WhatsApp Persona 5\nAbre WhatsApp con el tema completo.\n\nWhatsApp Persona 5 - Buscar actualizaciones\nConsulta nuevas versiones en GitHub.\n\nWhatsApp Persona 5 - Desinstalar\nQuita el tema, sus accesos y el inicio automatico.\nConserva WhatsApp y tus conversaciones.",109,230,10,false);
+   Label("WhatsApp Persona 5\nAbre WhatsApp con el tema completo.\n\nWhatsApp Persona 5 - Buscar actualizaciones\nDescarga e instala la ultima version automaticamente.\n\nWhatsApp Persona 5 - Desinstalar\nQuita el tema, sus accesos y el inicio automatico.\nConserva WhatsApp y tus conversaciones.",109,230,10,false);
   }
  }
  void Next(object sender,EventArgs e) {
@@ -112,6 +112,17 @@ class Installer : Form {
 }
 static class Setup {
  [STAThread] static int Main(string[] args) {
+  if(args.Length==1&&args[0]=="--update") {
+   try {
+    if(!File.Exists(Path.Combine(Bundle.Destination,"version.json")))throw new Exception("No existe una instalacion que actualizar.");
+    Bundle.Run(false,true,true);
+    if(!String.IsNullOrEmpty(Bundle.PendingReport))return 2;
+    return 0;
+   } catch(Exception e) {
+    try {var dir=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"WhatsAppPersona5");Directory.CreateDirectory(dir);File.WriteAllText(Path.Combine(dir,"install-error.log"),e.ToString());}catch{}
+    return 1;
+   }
+  }
   if(args.Length==1&&args[0]=="--verify") {try{Bundle.Run(true);return 0;}catch(Exception e){File.WriteAllText(Path.Combine(Path.GetTempPath(),"WhatsAppPersona5-verify.txt"),e.ToString());return 1;}}
   Application.EnableVisualStyles(); Application.SetCompatibleTextRenderingDefault(false);
   Application.Run(new Installer());return 0;

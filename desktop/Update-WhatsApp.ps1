@@ -1,5 +1,7 @@
 param([switch]$Force)
 $ErrorActionPreference = 'Stop'
+# Desktop callers may inherit PowerShell 7 module paths; use Windows' own modules.
+$env:PSModulePath = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\Modules'
 $lock = [System.Threading.Mutex]::new($false,'Local\WhatsAppPersona5Updates')
 if (!$lock.WaitOne(0)) { $lock.Dispose(); exit }
 $attempted = $false

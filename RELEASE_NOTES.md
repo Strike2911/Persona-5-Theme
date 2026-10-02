@@ -1,5 +1,6 @@
-## 1.3.6
+﻿## 1.3.7
 
+- Corrige la carga de modulos de Windows PowerShell al actualizar desde otras aplicaciones.
 - Actualizaciones directas: descarga e instala la ultima version desde GitHub sin abrir el navegador.
 - Comprobacion diaria al abrir el tema y comprobacion inmediata desde Buscar actualizaciones.
 - Verifica origen, tamano y SHA256 antes de ejecutar el instalador. Los bloqueos de Windows se respetan y los errores quedan registrados.

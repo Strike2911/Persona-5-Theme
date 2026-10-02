@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -74,7 +74,7 @@ class Installer : Form {
    step.Text="2 / 3   ANTES DE INSTALAR";next.Text="Instalar tema";back.Text="Atrás";next.Enabled=false;
    Label("Una cosa que debes saber",0,40,20,true);
    Label("El tema abre WhatsApp con una conexión de depuración local.\nPermite cambiar su aspecto, pero otros programas de tu PC\npodrían acceder a esa ventana mientras esté abierta.",55,85,12,false);
-   Label("Para desactivarla, usa «WhatsApp - Restaurar normal».\nCerrar solo la ventana puede dejar WhatsApp en la bandeja.\nSe consulta GitHub al abrir el tema para avisar de actualizaciones.",151,80,11,false);
+   Label("Para quitar el tema, usa «WhatsApp Persona 5 - Desinstalar».\nCerrar solo la ventana puede dejar WhatsApp en la bandeja.\nSe consulta GitHub al abrir el tema para avisar de actualizaciones.",151,80,11,false);
    consent=new CheckBox {Text="Entiendo y quiero instalar el tema en este equipo.",Location=new Point(0,235),Size=new Size(675,30),ForeColor=Color.White};
    consent.CheckedChanged+=(s,e)=>next.Enabled=consent.Checked;content.Controls.Add(consent);
    startupChoice=new CheckBox {Text="Abrir WhatsApp con Persona 5 al iniciar Windows",Checked=autoStart,Location=new Point(0,272),Size=new Size(675,30),ForeColor=Color.White}; startupChoice.CheckedChanged+=(s,e)=>autoStart=startupChoice.Checked;content.Controls.Add(startupChoice);
@@ -92,7 +92,7 @@ class Installer : Form {
    step.Text="LISTO PARA USAR";next.Text="Abrir WhatsApp";back.Text="Terminar";
    Label("¡Ya está instalado!",0,46,24,true);
    Label("Busca estos accesos en el menú Inicio:",68,32,12,false);
-   Label("WhatsApp Persona 5\nEl tema completo con animaciones.\n\nWhatsApp Persona 5 - Ligero\nEl mismo diseño sin animaciones.\n\nWhatsApp - Restaurar normal\nAbre WhatsApp sin tema ni depuración.\n\nBuscar actualizaciones: consulta nuevas versiones en GitHub.",109,230,10,false);
+   Label("WhatsApp Persona 5\nAbre WhatsApp con el tema completo.\n\nWhatsApp Persona 5 - Buscar actualizaciones\nConsulta nuevas versiones en GitHub.\n\nWhatsApp Persona 5 - Desinstalar\nQuita el tema, sus accesos y el inicio automatico.\nConserva WhatsApp y tus conversaciones.",109,230,10,false);
   }
  }
  void Next(object sender,EventArgs e) {

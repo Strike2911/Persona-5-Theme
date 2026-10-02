@@ -11,9 +11,8 @@ try {
     $package = Get-AppxPackage 5319275A.WhatsAppDesktop
     foreach ($entry in @(
         @{Name='WhatsApp Persona 5';Args='';Description='WhatsApp oficial con tema Persona 5 y efectos breves'},
-        @{Name='WhatsApp Persona 5 - Ligero';Args=' -Lite';Description='WhatsApp oficial con tema Persona 5 sin transiciones'},
-        @{Name='WhatsApp - Restaurar normal';Args=' -Normal';Description='Reinicia WhatsApp sin tema ni depuracion local'},
-        @{Name='WhatsApp Persona 5 - Buscar actualizaciones';Args=' -Force';Script='Update-WhatsApp.ps1';Description='Busca nuevas versiones del tema en GitHub'}
+        @{Name='WhatsApp Persona 5 - Buscar actualizaciones';Args=' -Force';Script='Update-WhatsApp.ps1';Description='Busca nuevas versiones del tema en GitHub'},
+        @{Name='WhatsApp Persona 5 - Desinstalar';Args='';Script='Uninstall.ps1';Description='Quita el tema y su inicio automatico; conserva WhatsApp'}
     )) {
         # Inicio es independiente del escritorio: este puede faltar o estar protegido.
         $link = Join-Path $startMenu ($entry.Name + '.lnk')
@@ -37,3 +36,4 @@ try {
         } catch { Write-Warning ('No se pudo crear el acceso en el escritorio. Disponible en Inicio: ' + $entry.Name) }
     }
 } finally { [void][Runtime.InteropServices.Marshal]::ReleaseComObject($shell) }
+& (Join-Path $PSScriptRoot 'Remove-ThemeShortcuts.ps1') -Names @('WhatsApp Persona 5 - Ligero','WhatsApp - Restaurar normal')

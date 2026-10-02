@@ -1,4 +1,4 @@
-param([switch]$CheckOnly, [switch]$Silent, [ValidateSet('Keep','Enable','Disable')][string]$StartupMode='Keep')
+﻿param([switch]$CheckOnly, [switch]$Silent, [ValidateSet('Keep','Enable','Disable')][string]$StartupMode='Keep')
 $ErrorActionPreference = 'Stop'
 $installStage = 'Verificar paquete'
 $filesCopied = $false
@@ -20,7 +20,7 @@ Instalar el tema Persona 5 para WhatsApp oficial.
 
 Se guardara en tu carpeta local de programas y creara accesos en el menu Inicio y, si esta disponible, en el escritorio. Incluye Node.js; no necesitas instalarlo aparte. No incluye ni copia conversaciones o sesiones.
 
-El acceso del tema reinicia WhatsApp y habilita depuracion SOLO en este equipo. Otros programas locales podrian acceder al contenido mientras esa sesion siga abierta. Cerrar la ventana puede dejar WhatsApp en la bandeja. Usa 'WhatsApp - Restaurar normal' para cerrar esa sesion y desactivar la depuracion.
+El acceso del tema reinicia WhatsApp y habilita depuracion SOLO en este equipo. Otros programas locales podrian acceder al contenido mientras esa sesion siga abierta. Cerrar la ventana puede dejar WhatsApp en la bandeja. Usa 'WhatsApp Persona 5 - Desinstalar' para quitar el tema y restaurar WhatsApp normal.
 
 Adaptacion no oficial. Las actualizaciones de WhatsApp pueden requerir actualizar el tema.
 
@@ -78,7 +78,7 @@ Deseas instalarlo?
         if (!$Silent) { [System.Windows.Forms.MessageBox]::Show($detail,'Instalacion con pendientes','OK','Warning') | Out-Null }
         exit 2
     }
-    if (!$Silent) { [System.Windows.Forms.MessageBox]::Show('Instalado. Abre WhatsApp Persona 5 desde el menu Inicio o el escritorio. El modo Ligero desactiva animaciones. Para volver a WhatsApp sin depuracion, usa Restaurar normal.','Instalacion completa','OK','Information') | Out-Null }
+    if (!$Silent) { [System.Windows.Forms.MessageBox]::Show('Instalado. Abre WhatsApp Persona 5 desde el menu Inicio o el escritorio. Los otros accesos permiten buscar actualizaciones y desinstalar el tema conservando WhatsApp.','Instalacion completa','OK','Information') | Out-Null }
 } catch {
     $failure = $_
     $report = @(

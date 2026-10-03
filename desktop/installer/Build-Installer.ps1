@@ -21,6 +21,10 @@ $manifest=@(Get-ChildItem $payload -Recurse -File | ForEach-Object { @{path=$_.F
 ConvertTo-Json -InputObject $manifest | Set-Content -Encoding UTF8 "$stage\files.json"
 & "$payload\desktop\runtime\node.exe" --test "$payload\desktop\theme.test.mjs" "$payload\desktop\updater.test.mjs" "$payload\desktop\effects.test.mjs" "$payload\desktop\native-notifications.test.mjs"
 if($LASTEXITCODE -ne 0){throw 'Pruebas fallidas.'}
+& "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$payload\desktop\LoopbackListener.test.ps1"
+if($LASTEXITCODE -ne 0){throw 'Pruebas de puertos fallidas.'}
+& "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$payload\desktop\Uninstall.test.ps1"
+if($LASTEXITCODE -ne 0){throw 'Pruebas del desinstalador fallidas.'}
 Get-ChildItem $payload -Filter *.ps1 -Recurse | ForEach-Object { $tokens=$null;$errors=$null;[void][Management.Automation.Language.Parser]::ParseFile($_.FullName,[ref]$tokens,[ref]$errors);if($errors){throw ($errors|Out-String)} }
 $zip=Join-Path $stage 'package.zip'
 Compress-Archive -Path "$stage\payload","$stage\files.json","$stage\Install.ps1" -DestinationPath $zip

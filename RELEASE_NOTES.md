@@ -1,10 +1,8 @@
-﻿## 1.3.7
+## 1.3.8
 
-- Corrige la carga de modulos de Windows PowerShell al actualizar desde otras aplicaciones.
-- Actualizaciones directas: descarga e instala la ultima version desde GitHub sin abrir el navegador.
-- Comprobacion diaria al abrir el tema y comprobacion inmediata desde Buscar actualizaciones.
-- Verifica origen, tamano y SHA256 antes de ejecutar el instalador. Los bloqueos de Windows se respetan y los errores quedan registrados.
-- Conserva la preferencia de inicio automatico. Si WhatsApp esta abierto, se reinicia tras actualizar para cargar los cambios.
-- El desinstalador admite retirar la integracion de una copia de desarrollo sin borrar el proyecto.
-
-Las versiones anteriores necesitan instalar esta version una vez para disponer del nuevo actualizador.
+- Corrige el fallo Clase no valida despues de aplicar el tema cuando falla la consulta CIM de conexiones TCP.
+- Comprueba los puertos reales IPv4 e IPv6 mediante .NET, sin depender de Get-NetTCPConnection. Mantiene el rechazo de puertos abiertos a la red y de puertos ausentes.
+- El registro de arranque identifica la etapa, tipo de error y linea para distinguir fallos de red, activacion y permisos.
+- No modifica WMI, permisos de Windows ni protecciones del antivirus.
+- Corrige la desinstalacion iniciada desde un acceso directo que mantiene bloqueada la carpeta desktop: libera el directorio de trabajo nativo y espera brevemente a que Windows libere los archivos.
+- El cierre de los componentes propios al desinstalar ya no depende de CIM. Si falla, guarda uninstall-error.log fuera del programa.

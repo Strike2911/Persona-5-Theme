@@ -67,3 +67,22 @@ html[data-p5-desktop] #main [data-testid="icon-down-context"] {
 }
 html[data-p5-desktop] #main [data-testid="icon-down-context"] :is(div,span,button) {background:transparent !important;color:#fff !important;box-shadow:none !important}
 html[data-p5-desktop] #main [data-testid="icon-down-context"] svg {color:#fff !important}
+
+/* Read receipts only: delivered double checks keep their neutral color.
+   WhatsApp 2.2640 uses x1rv0e52 / --WDS-content-read for the read state. */
+html[data-p5-desktop] body,
+html[data-p5-desktop] #app {
+ --WDS-content-read:#ed0024 !important;
+ --WDS-content-read-RGB:237,0,36 !important;
+ --icon-ack:#ed0024 !important;
+}
+html[data-p5-desktop] #main span:is([aria-label~="Leído"],[aria-label~="Read"],.x1rv0e52),
+html[data-p5-desktop] #main span:is([aria-label~="Leído"],[aria-label~="Read"],.x1rv0e52) svg,
+html[data-p5-desktop] #side [data-testid="last-msg-status"] .x1rv0e52,
+html[data-p5-desktop] #side [data-testid="last-msg-status"] .x1rv0e52 :is(span,svg) {
+ color:#ed0024 !important;
+}
+/* Keep red readable on the selected red chat row. */
+html[data-p5-desktop] #side [data-testid="last-msg-status"] .x1rv0e52 svg {
+ filter:drop-shadow(0 0 1px #090909);
+}

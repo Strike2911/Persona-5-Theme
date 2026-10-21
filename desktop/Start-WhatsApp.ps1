@@ -1,5 +1,6 @@
 param([switch]$Normal, [switch]$Lite, [switch]$Startup)
 $ErrorActionPreference = 'Stop'
+$env:PSModulePath = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\Modules'
 $logDirectory = Join-Path $env:LOCALAPPDATA 'WhatsAppPersona5'
 $logPath = Join-Path $logDirectory 'launch.log'
 function Write-LaunchLog([string]$Message) {
@@ -49,12 +50,20 @@ try {
     $stage = 'Activar WhatsApp oficial'
     $started = & "$PSScriptRoot\Activate-WhatsApp.ps1" -Port $port | ConvertFrom-Json
     if (!$Normal) {
-        $extra = @()
-        if ($Lite) { $extra += '--lite' }
-        if ($Startup) { $extra += '--startup' }
         $stage = 'Aplicar tema'
-        & $node "$PSScriptRoot\apply-theme.mjs" "$port" @extra 2>&1 | ForEach-Object { Write-LaunchLog ([string]$_) }
-        if ($LASTEXITCODE -ne 0) { throw 'WhatsApp no permitio aplicar el tema. Se abrira normalmente.' }
+        for ($attempt = 1; $attempt -le 2; $attempt++) {
+            $result = & "$PSScriptRoot\Invoke-ThemeProcess.ps1" -Node $node -Port $port -Lite:$Lite -Startup:($Startup -and $attempt -eq 1)
+            if ($result.Output) { Write-LaunchLog $result.Output.Trim() }
+            if ($result.Error) { Write-LaunchLog $result.Error.Trim() }
+            if ($result.Code -eq 0) { break }
+            if ($result.Code -ne 2 -or $attempt -eq 2) {
+                throw ('No se pudo conectar o aplicar el tema tras ' + $attempt + ' intento(s). Se intentara abrir WhatsApp normal. Detalle: ' + $result.Error.Trim())
+            }
+            Write-LaunchLog 'Local connection timed out; restarting official WhatsApp once for recovery.'
+            Get-Process WhatsApp.Root -ErrorAction SilentlyContinue | Stop-Process -ErrorAction Stop
+            Start-Sleep -Seconds 3
+            $started = & "$PSScriptRoot\Activate-WhatsApp.ps1" -Port $port | ConvertFrom-Json
+        }
         $stage = 'Comprobar puerto local de WhatsApp'
         & "$PSScriptRoot\Assert-LoopbackListener.ps1" -Port $port
         Write-LaunchLog 'Theme verified; actual TCP listeners limited to loopback (.NET, no CIM).'
@@ -82,6 +91,8 @@ try {
             & "$PSScriptRoot\Activate-WhatsApp.ps1" -Port 0 | Out-Null
         } catch { Write-LaunchLog ('Normal activation also failed: ' + $_.Exception.Message) }
     }
+    # Release before showing a modal error: dismissing it must not block a new launch.
+    if ($ownsLock) { $launchLock.ReleaseMutex(); $ownsLock = $false }
     Add-Type -AssemblyName System.Windows.Forms
     [System.Windows.Forms.MessageBox]::Show(($reason + "`n`nRegistro del arranque: " + $logPath), 'WhatsApp Persona 5') | Out-Null
     exit 1

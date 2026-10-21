@@ -1,5 +1,5 @@
 import {readFile} from 'node:fs/promises';
-import {connect} from './cdp.mjs';
+import {waitForConnection} from './cdp.mjs';
 import {installEffects, createMessageTracker} from './effects.mjs';
 
 export async function buildSource(lite = false) {
@@ -109,14 +109,7 @@ export async function buildSource(lite = false) {
 
 export async function applyTheme(port, lite = false, startup = false) {
   const source = await buildSource(lite);
-  const deadline = Date.now() + (startup ? 90000 : 35000);
-  let client;
-  let lastError;
-  while (Date.now() < deadline) {
-    try { client = await connect(port); break; }
-    catch (error) { lastError = error; await new Promise(resolve => setTimeout(resolve, 700)); }
-  }
-  if (!client) throw lastError;
+  const client = await waitForConnection(port, startup ? 90000 : 35000);
   try {
     await client.send('Page.enable');
     await client.send('Page.addScriptToEvaluateOnNewDocument', {source});
@@ -144,6 +137,6 @@ export async function applyTheme(port, lite = false, startup = false) {
 if (process.argv[2]) {
   await applyTheme(Number(process.argv[2]), process.argv.includes('--lite'), process.argv.includes('--startup')).catch(error => {
     console.error(error.message);
-    process.exitCode = 1;
+    process.exitCode = error.code === 'P5_CONNECT_TIMEOUT' ? 2 : 1;
   });
 }

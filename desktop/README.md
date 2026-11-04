@@ -87,6 +87,8 @@ Los accesos originales de WhatsApp no se interceptan. Si el proceso está cerrad
 
 El lanzador registra etapas y errores técnicos en %LOCALAPPDATA%\WhatsAppPersona5\launch.log (sin conversaciones). El arranque con -Startup permite hasta 90 segundos para que aparezca la página de WhatsApp. Un fallo al restaurar la app normal también queda registrado y no oculta el error original.
 
+Desde 1.3.11, ese plazo incluye la espera del contexto de ejecucion y la recuperacion si Windows reemplaza la pagina durante el inicio. El lanzador espera la salida del host anterior y reintenta una vez si la conexion o la comprobacion final detectan que desaparecio el puerto. Un puerto expuesto fuera de loopback se rechaza sin reintentar. La espera inicial de treinta segundos queda dentro del bloqueo que impide arranques duplicados.
+
 ### Cambio de ventana (1.2.3)
 
 Al recuperar el foco o cambiar la visibilidad, el tema descarta únicamente sus animaciones de entrada pendientes. Las entradas creadas sin foco se descartan; los mensajes nuevos con foco conservan el efecto Persona 5. No se pausan vídeos ni animaciones nativas. No se añaden temporizadores ni observadores a la lista de mensajes. Los manejadores se liberan al reaplicar el tema. El retrato solo modifica la variable CSS cuando cambia la foto.

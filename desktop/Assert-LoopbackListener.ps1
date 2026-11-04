@@ -4,7 +4,11 @@ $ErrorActionPreference = 'Stop'
 try {
     $listeners = @([System.Net.NetworkInformation.IPGlobalProperties]::GetIPGlobalProperties().GetActiveTcpListeners() | Where-Object { $_.Port -eq $Port })
 } catch { throw ('No se pudo comprobar el puerto de WhatsApp: ' + $_.Exception.Message) }
-if ($listeners.Count -eq 0) { throw 'No se encontro el puerto de depuracion de WhatsApp. Se abrira sin tema.' }
+if ($listeners.Count -eq 0) {
+    $notReady = [InvalidOperationException]::new('No se encontro el puerto de depuracion de WhatsApp. Se abrira sin tema.')
+    $notReady.Data['P5Retryable'] = $true
+    throw $notReady
+}
 foreach ($endpoint in $listeners) {
     if (![System.Net.IPAddress]::IsLoopback($endpoint.Address)) {
         throw 'La conexion de depuracion no esta limitada al equipo. Se abrira WhatsApp sin tema.'

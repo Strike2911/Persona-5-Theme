@@ -38,11 +38,11 @@ export async function connect(port) {
     if (!call) return;
     pending.delete(data.id);
     clearTimeout(call.timeout);
-    if (data.error) call.reject(Error(data.error.message)); else call.resolve(data.result);
+    if (data.error) call.reject(Object.assign(Error(data.error.message), {code:'P5_CDP_ERROR', cdpCode:data.error.code})); else call.resolve(data.result);
   });
   socket.addEventListener('close', () => {
     for(const listener of listeners.get('P5.connectionClosed')||[]) {try{listener();}catch{}}
-    for (const call of pending.values()) { clearTimeout(call.timeout); call.reject(Error('WhatsApp se cerro')); }
+    for (const call of pending.values()) { clearTimeout(call.timeout); call.reject(Object.assign(Error('WhatsApp se cerro'), {code:'P5_CONNECTION_CLOSED'})); }
     pending.clear();
   });
   return {
@@ -50,8 +50,11 @@ export async function connect(port) {
     close: () => socket.close(),
     send(method, params = {}) {
       return new Promise((resolve, reject) => {
+        if (socket.readyState !== WebSocket.OPEN) {
+          reject(Object.assign(Error('WhatsApp se cerro'), {code:'P5_CONNECTION_CLOSED'})); return;
+        }
         const messageId = ++id;
-        const timeout = setTimeout(() => { pending.delete(messageId); reject(Error(`Timeout: ${method}`)); }, 10000);
+        const timeout = setTimeout(() => { pending.delete(messageId); reject(Object.assign(Error(`Timeout: ${method}`), {code:'P5_CDP_TIMEOUT'})); }, 10000);
         pending.set(messageId, {resolve, reject, timeout});
         socket.send(JSON.stringify({id: messageId, method, params}));
       });

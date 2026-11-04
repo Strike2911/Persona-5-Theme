@@ -7,12 +7,18 @@ function Check-Listener([System.Net.IPAddress]$Address, [bool]$Allowed) {
         $listener.Start()
         $port = $listener.LocalEndpoint.Port
         $rejected = $false
-        try { & "$PSScriptRoot\Assert-LoopbackListener.ps1" -Port $port } catch { $rejected = $true }
+        try { & "$PSScriptRoot\Assert-LoopbackListener.ps1" -Port $port } catch {
+            $rejected = $true
+            if ($_.Exception.Data['P5Retryable']) { throw 'Unsafe listeners must not be retryable.' }
+        }
         if ($rejected -eq $Allowed) { throw ('Resultado inesperado: ' + $Address) }
         Write-Output ('PASS listener ' + $Address)
     } finally { $listener.Stop() }
     $rejected = $false
-    try { & "$PSScriptRoot\Assert-LoopbackListener.ps1" -Port $port } catch { $rejected = $true }
+    try { & "$PSScriptRoot\Assert-LoopbackListener.ps1" -Port $port } catch {
+        $rejected = $true
+        if (!$_.Exception.Data['P5Retryable']) { throw 'A disappeared listener must trigger recovery.' }
+    }
     if (!$rejected) { throw 'Se acepto un puerto cerrado.' }
 }
 Check-Listener ([System.Net.IPAddress]::Loopback) $true

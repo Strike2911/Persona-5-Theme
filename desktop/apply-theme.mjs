@@ -107,31 +107,63 @@ export async function buildSource(lite = false) {
   })();`;
 }
 
+function transientContextError(error) {
+  return error.code === 'P5_CDP_ERROR' && /cannot find (default execution context|context with specified id)|execution context (was destroyed|is not available)|inspected target navigated/i.test(error.message);
+}
+function transientStartupError(error) {
+  return ['P5_CONNECTION_CLOSED','P5_CDP_TIMEOUT'].includes(error.code) || transientContextError(error) ||
+    (error.code === 'P5_CDP_ERROR' && /inspected target closed|session closed|target closed/i.test(error.message));
+}
+
+export async function installSource(port, source, timeout, {
+  connectImpl=waitForConnection, now=Date.now, sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms))
+}={}) {
+  const deadline = now() + timeout;
+  let lastError;
+  while (now() < deadline) {
+    let client;
+    try {
+      client = await connectImpl(port, Math.max(1,deadline-now()));
+      await client.send('Page.enable');
+      await client.send('Page.addScriptToEvaluateOnNewDocument', {source});
+      // The debug target can appear before its execution context or DOM exists,
+      // and Windows can replace that target while restoring the app at login.
+      const verifyDeadline = Math.min(deadline, now() + 15000);
+      let evaluated = false;
+      while (now() < verifyDeadline) {
+        try {
+          if (!evaluated) {
+            const result = await client.send('Runtime.evaluate', {expression:source});
+            if (result.exceptionDetails) throw Error('No se pudo insertar el tema');
+            evaluated = true;
+          }
+          const verified = await client.send('Runtime.evaluate', {
+            expression: `Boolean(document.getElementById('p5-desktop-theme'))`, returnByValue:true
+          });
+          if (verified.result?.value) return;
+        } catch (error) {
+          if (!transientContextError(error)) throw error;
+          // Keep the live session and its reload script while a context changes.
+          // A closed target instead reconnects and registers on the new session.
+          evaluated = false;
+          lastError = error;
+        }
+        await sleep(Math.min(250,Math.max(0,verifyDeadline-now())));
+      }
+      lastError = Error('La pagina de WhatsApp todavia no termino de cargar el tema');
+    } catch (error) {
+      if (!transientStartupError(error)) throw error;
+      lastError = error;
+    } finally { client?.close(); }
+    await sleep(Math.min(500,Math.max(0,deadline-now())));
+  }
+  throw Object.assign(new Error('WhatsApp no termino de preparar el tema (' + (lastError?.message || 'sin respuesta') + ').', {cause:lastError}), {code:'P5_CONNECT_TIMEOUT'});
+}
+
 export async function applyTheme(port, lite = false, startup = false) {
   const source = await buildSource(lite);
-  const client = await waitForConnection(port, startup ? 90000 : 35000);
-  try {
-    await client.send('Page.enable');
-    await client.send('Page.addScriptToEvaluateOnNewDocument', {source});
-    const result = await client.send('Runtime.evaluate', {expression:source});
-    if (result.exceptionDetails) throw Error('No se pudo insertar el tema');
-    // First activation may expose the page before DOMContentLoaded.
-    let installed = false;
-    const verifyDeadline = Date.now() + 15000;
-    while (Date.now() < verifyDeadline) {
-      try {
-        const verified = await client.send('Runtime.evaluate', {
-          expression: `Boolean(document.getElementById('p5-desktop-theme'))`, returnByValue:true
-        });
-        if (verified.result?.value) { installed = true; break; }
-      } catch (error) {
-        if (!/context|navigat/i.test(error.message)) throw error;
-      }
-      await new Promise(resolve => setTimeout(resolve,250));
-    }
-    if (!installed) throw Error('No se pudo verificar el tema');
-    console.log('Tema Persona 5 aplicado a WhatsApp oficial.');
-  } finally { client.close(); }
+  await installSource(port, source, startup ? 90000 : 35000);
+  console.log('Tema Persona 5 aplicado a WhatsApp oficial.');
 }
 
 if (process.argv[2]) {

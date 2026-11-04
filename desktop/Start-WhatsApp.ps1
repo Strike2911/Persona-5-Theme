@@ -13,8 +13,6 @@ function Write-LaunchLog([string]$Message) {
     } catch { } # Diagnostics must never prevent launching.
 }
 Write-LaunchLog "Launch requested; startup=$Startup; normal=$Normal"
-# Allow Windows time to restore Store apps and their WebView processes.
-if ($Startup) { Start-Sleep -Seconds 30 }
 $launchLock = [System.Threading.Mutex]::new($false, 'Local\WhatsAppPersona5Launcher')
 $ownsLock = $false
 $stage = 'Preparar arranque'
@@ -22,6 +20,9 @@ try {
     try { $ownsLock = $launchLock.WaitOne(0) }
     catch [System.Threading.AbandonedMutexException] { $ownsLock = $true }
     if (!$ownsLock) { Write-LaunchLog 'Another launcher is active.'; return }
+    # Include the startup delay in the lock so two login launches cannot queue
+    # up and restart an already themed WhatsApp a second time.
+    if ($Startup) { Start-Sleep -Seconds 30 }
     if (!$Normal) {
         $node = Join-Path $PSScriptRoot 'runtime\node.exe'
         if (!(Test-Path -LiteralPath $node)) { $node = (Get-Command node.exe -ErrorAction Stop).Source }
@@ -31,6 +32,9 @@ try {
     $stage = 'Localizar WhatsApp oficial'
     $package = Get-AppxPackage 5319275A.WhatsAppDesktop
     if (!$package) { throw 'No se encontro WhatsApp de Microsoft Store.' }
+    $stage = 'Cerrar la sesion anterior de WhatsApp'
+    $restartAttempted = $true
+    & "$PSScriptRoot\Stop-WhatsAppSession.ps1"
     # Release an ephemeral loopback port immediately before starting WebView2.
     $port = 0
     if (!$Normal) {
@@ -39,13 +43,6 @@ try {
         $port = $listener.LocalEndpoint.Port
         $listener.Stop()
     }
-    $stage = 'Cerrar la sesion anterior de WhatsApp'
-    $restartAttempted = $true
-    Get-Process WhatsApp.Root -ErrorAction SilentlyContinue | ForEach-Object { [void]$_.CloseMainWindow() }
-    Start-Sleep -Milliseconds 1500
-    # Closing the window can leave WhatsApp in the tray; end only its host.
-    Get-Process WhatsApp.Root -ErrorAction SilentlyContinue | Stop-Process
-    Start-Sleep -Milliseconds 1200
     Write-LaunchLog 'Activating official WhatsApp.'
     $stage = 'Activar WhatsApp oficial'
     $started = & "$PSScriptRoot\Activate-WhatsApp.ps1" -Port $port | ConvertFrom-Json
@@ -55,17 +52,25 @@ try {
             $result = & "$PSScriptRoot\Invoke-ThemeProcess.ps1" -Node $node -Port $port -Lite:$Lite -Startup:($Startup -and $attempt -eq 1)
             if ($result.Output) { Write-LaunchLog $result.Output.Trim() }
             if ($result.Error) { Write-LaunchLog $result.Error.Trim() }
-            if ($result.Code -eq 0) { break }
-            if ($result.Code -ne 2 -or $attempt -eq 2) {
+            if ($result.Code -eq 0) {
+                $stage = 'Comprobar puerto local de WhatsApp'
+                try {
+                    & "$PSScriptRoot\Assert-LoopbackListener.ps1" -Port $port
+                    break
+                } catch {
+                    # A restored WebView can disappear just after injection.
+                    # Retry a missing listener, but never a non-loopback one.
+                    if (!$_.Exception.Data['P5Retryable'] -or $attempt -eq 2) { throw }
+                    Write-LaunchLog 'Debug listener disappeared after applying the theme; recovering once.'
+                }
+            } elseif ($result.Code -ne 2 -or $attempt -eq 2) {
                 throw ('No se pudo conectar o aplicar el tema tras ' + $attempt + ' intento(s). Se intentara abrir WhatsApp normal. Detalle: ' + $result.Error.Trim())
             }
-            Write-LaunchLog 'Local connection timed out; restarting official WhatsApp once for recovery.'
-            Get-Process WhatsApp.Root -ErrorAction SilentlyContinue | Stop-Process -ErrorAction Stop
-            Start-Sleep -Seconds 3
+            Write-LaunchLog 'Local startup not ready; restarting official WhatsApp once for recovery.'
+            & "$PSScriptRoot\Stop-WhatsAppSession.ps1"
             $started = & "$PSScriptRoot\Activate-WhatsApp.ps1" -Port $port | ConvertFrom-Json
+            $stage = 'Aplicar tema (recuperacion)'
         }
-        $stage = 'Comprobar puerto local de WhatsApp'
-        & "$PSScriptRoot\Assert-LoopbackListener.ps1" -Port $port
         Write-LaunchLog 'Theme verified; actual TCP listeners limited to loopback (.NET, no CIM).'
         $popup = Join-Path $PSScriptRoot 'NotificationPopup.exe'
         if(Test-Path -LiteralPath $popup) {
@@ -86,8 +91,7 @@ try {
     # Fail closed: no debug session left behind if applying the theme fails.
     if ($restartAttempted) {
         try {
-            Get-Process WhatsApp.Root -ErrorAction SilentlyContinue | Stop-Process
-            Start-Sleep -Milliseconds 1200
+            & "$PSScriptRoot\Stop-WhatsAppSession.ps1"
             & "$PSScriptRoot\Activate-WhatsApp.ps1" -Port 0 | Out-Null
         } catch { Write-LaunchLog ('Normal activation also failed: ' + $_.Exception.Message) }
     }

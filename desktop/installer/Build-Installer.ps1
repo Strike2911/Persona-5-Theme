@@ -19,10 +19,14 @@ Copy-Item -LiteralPath "$repoRoot\LICENSE" -Destination "$payload\LICENSE"
 Copy-Item -LiteralPath "$PSScriptRoot\Install.ps1" -Destination "$stage\Install.ps1"
 $manifest=@(Get-ChildItem $payload -Recurse -File | ForEach-Object { @{path=$_.FullName.Substring($payload.Length+1);sha256=(Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash} })
 ConvertTo-Json -InputObject $manifest | Set-Content -Encoding UTF8 "$stage\files.json"
-& "$payload\desktop\runtime\node.exe" --test "$payload\desktop\theme.test.mjs" "$payload\desktop\updater.test.mjs" "$payload\desktop\effects.test.mjs" "$payload\desktop\native-notifications.test.mjs" "$payload\desktop\cdp.test.mjs"
+& "$payload\desktop\runtime\node.exe" --test "$payload\desktop\theme.test.mjs" "$payload\desktop\updater.test.mjs" "$payload\desktop\effects.test.mjs" "$payload\desktop\native-notifications.test.mjs" "$payload\desktop\cdp.test.mjs" "$payload\desktop\startup.test.mjs"
 if($LASTEXITCODE -ne 0){throw 'Pruebas fallidas.'}
 & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$payload\desktop\ThemeProcess.test.ps1" -Node "$payload\desktop\runtime\node.exe"
 if($LASTEXITCODE -ne 0){throw 'Pruebas del proceso del tema fallidas.'}
+& "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$payload\desktop\Launcher.test.ps1"
+if($LASTEXITCODE -ne 0){throw 'Pruebas del lanzador fallidas.'}
+& "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$payload\desktop\StopSession.test.ps1" -Node "$payload\desktop\runtime\node.exe"
+if($LASTEXITCODE -ne 0){throw 'Pruebas de cierre de sesion fallidas.'}
 & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$payload\desktop\LoopbackListener.test.ps1"
 if($LASTEXITCODE -ne 0){throw 'Pruebas de puertos fallidas.'}
 & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$payload\desktop\Uninstall.test.ps1"
